@@ -175,6 +175,14 @@ export class NavBase {
     return promise;
   }
 
+  canSwipeBack() {
+    return !this.isTransitioning() && this.items.length > 1;
+  }
+  
+  isSwipingBack() {
+    return this.sbActive
+  }
+
   swipeBackStart() {
     if (this.isTransitioning() || this.items.length < 2) {
       return;

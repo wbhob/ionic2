@@ -17,12 +17,20 @@ class AsideGesture extends SlideEdgeGesture {
   }
 
   canStart(ev) {
+    if(ev.gesture.srcEvent.defaultPrevented) {
+      console.log('CANT START');
+      return false;
+    }
     // Only restrict edges if the aside is closed
     return this.aside.isOpen ? true : super.canStart(ev);
   }
 
   // Set CSS, then wait one frame for it to apply before sliding starts
   onSlideBeforeStart(slide, ev) {
+    if(ev.gesture.srcEvent.defaultPrevented) {
+      console.log('CANT slide before start');
+      return false;
+    }
     this.aside.setSliding(true);
     this.aside.setChanging(true);
     return new Promise(resolve => {
@@ -30,10 +38,18 @@ class AsideGesture extends SlideEdgeGesture {
     });
   }
   onSlide(slide, ev) {
+    if(ev.gesture.srcEvent.defaultPrevented) {
+      console.log('CANT slide');
+      return false;
+    }
     this.aside.setOpenAmt(slide.distance / slide.max);
     this.aside.setTransform('translate3d(' + slide.distance + 'px,0,0)');
   }
   onSlideEnd(slide, ev) {
+    if(ev.gesture.srcEvent.defaultPrevented) {
+      console.log('CANT slide end');
+      return false;
+    }
     this.aside.setTransform('');
     this.aside.setSliding(false);
     if (Math.abs(ev.velocityX) > 0.2 || Math.abs(slide.delta) > Math.abs(slide.max) * 0.5) {

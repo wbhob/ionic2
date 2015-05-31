@@ -16,11 +16,22 @@ export class SwipeHandle {
     gesture.listen();
 
     gesture.on('panend', onDragEnd);
+    gesture.on('panstart', onDragStart);
     gesture.on('panleft', onDragHorizontal);
     gesture.on('panright', onDragHorizontal);
 
     let startX = null;
     let swipeableAreaWidth = null;
+
+    function onDragStart(ev) {
+      console.log('Swipe start', ev);
+      if(nav.canSwipeBack()) {
+        console.log('Can swipe, blocking');
+        ev.gesture.srcEvent.preventDefault();
+      } else {
+        console.log('Cantswipe');
+      }
+    }
 
     function onDragEnd(ev) {
       // TODO: POLISH THESE NUMBERS WITH GOOD MATHIFICATION
@@ -64,6 +75,12 @@ export class SwipeHandle {
       }
 
       nav.swipeBackProgress( (ev.gesture.center.x - startX) / swipeableAreaWidth );
+
+      // If we're swiping back, prevent default
+      if(nav.isSwipingBack()) {
+        ev.gesture.srcEvent.preventDefault();
+      }
+
     }
 
   }
