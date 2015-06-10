@@ -17,3 +17,6 @@ export * from 'ionic/animations/builtins'
 
 export * from 'ionic/transitions/transition'
 export * from 'ionic/transitions/ios-transition'
+
+
+export * from 'ionic/runner';

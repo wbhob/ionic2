@@ -27,10 +27,6 @@ class EngineController {
     });
   }
 
-  is(name) {
-    return this.name === name;
-  }
-
   getName() {
     return this.get().name;
   }
@@ -44,6 +40,16 @@ class EngineController {
 
   set(engine) {
     activeEngine = engine;
+
+    this._applyBodyClasses();
+  }
+
+  _applyBodyClasses() {
+    if(!activeEngine) {
+      return;
+    }
+
+    document.body.classList.add('engine-' + activeEngine.name);
   }
 
   setDefault(engine) {
@@ -63,6 +69,13 @@ class EngineController {
     return null;
   }
 
+  /**
+   * Check if the current engine name is active.
+   */
+  is(engineName) {
+    return registry[engineName] && registry[engineName].isMatch();
+  }
+
 }
 
 export let Engine = new EngineController();
@@ -70,4 +83,11 @@ export let Engine = new EngineController();
 Engine.setDefault({
   name: 'default',
   ready: util.dom.windowLoad
+});
+
+Engine.register({
+  name: 'webview',
+  isMatch() {
+    return !(!window.cordova && !window.PhoneGap && !window.phonegap);
+  }
 });

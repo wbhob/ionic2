@@ -314,6 +314,7 @@ function tapEventListener(type, enable, useCapture) {
 }
 
 function tapClick(e) {
+  console.log('TAP CLICK', e)
   // simulate a normal click by running the element's click method then focus on it
   var container = tapContainingElement(e.target);
   var ele = tapTargetElement(container);
@@ -448,7 +449,7 @@ function tapTouchStart(e) {
 }
 
 function tapTouchEnd(e) {
-  //console.log('touchend ' + Date.now());
+  console.log('touchend ' + Date.now());
   if (tapIgnoreEvent(e)) return;
 
   tapEnableTouchEvents();

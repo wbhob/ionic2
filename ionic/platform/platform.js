@@ -89,6 +89,12 @@ class PlatformController {
 
     return activePlatform.getDevice() === device;
   }
+
+  isEnvironment(envName) {
+    let env = this.environmentRegistry[envName];
+    if(!env) { return false; }
+    return env.isMatch();
+  }
 }
 
 export let Platform = new PlatformController((util.getQuerystring('ionicplatform')).toLowerCase(), window.navigator.userAgent);

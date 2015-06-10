@@ -6,9 +6,9 @@ let windowLoadListenderAttached = false;
 
 // setup listeners to know when the device is ready to go
 function onWindowLoad() {
-  alert('Window load' + window.cordova);
+  //alert('Window load' + window.cordova);
   if (Engine.is('webview')) {
-    alert('IS WEB VIEW');
+    //alert('IS WEB VIEW');
     // the window and scripts are fully loaded, and a cordova/phonegap
     // object exists then let's listen for the deviceready
     document.addEventListener("deviceready", onPlatformReady, false);
@@ -34,7 +34,7 @@ setTimeout(() => {
 function onPlatformReady() {
   Engine.set(Engine.detect());
 
-  alert('Platform ready');
+  //alert('Platform ready');
 
   // the device is all set to go, init our own stuff then fire off our event
 
