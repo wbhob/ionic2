@@ -1,4 +1,4 @@
-
+import {CSS} from 'ionic/util/dom'
 
 export class ListVirtualScroll {
   constructor(list) {
@@ -7,11 +7,14 @@ export class ListVirtualScroll {
 
     this.viewportHeight = this.content.domElement.offsetHeight;
 
-    this.viewContainer = this.list.itemTemplate.viewContainer;
+    //this.viewContainer = this.list.itemTemplate.viewContainer;
+    this.viewportElement = this.content.scrollElement.children[1];
 
-    this.itemHeight = 60;
+    this.itemTemplate = this.list.compiledItemTemplate;
 
-    this.shownItems = {};
+    this.itemHeight = 44;
+
+    this.shownItems = [];
     this.enteringItems = [];
     this.leavingItems = [];
 
@@ -20,13 +23,13 @@ export class ListVirtualScroll {
       this.resize();
 
       // Simulate the first event to start layout
-      this._handleVirtualScroll({
+      this._render({
         target: this.content.scrollElement
       });
     })
 
     this.content.addScrollEventListener((event) => {
-      this._handleVirtualScroll(event);
+      this._render(event);
     });
   }
 
@@ -42,7 +45,7 @@ export class ListVirtualScroll {
       ', itemsPerScreen:', this.itemsPerScreen, ')');
   }
 
-  _handleVirtualScroll(event) {
+  _render(event) {
     let item;
     let shownItemRef;
 
@@ -50,7 +53,7 @@ export class ListVirtualScroll {
     let sh = event.target.scrollHeight;
 
     let topIndex = Math.floor(st / this.itemHeight);
-    let bottomIndex = Math.floor((st / this.itemHeight) + this.itemsPerScreen);
+    let bottomIndex = Math.floor((st / this.itemHeight) + (this.itemsPerScreen + 10));
 
     let items = this.list.items;
 
@@ -60,8 +63,10 @@ export class ListVirtualScroll {
     // list if they're ouside this range.
     for(let i in this.shownItems) {
       if(i < topIndex || i > bottomIndex) {
-        this.leavingItems.push(this.shownItems[i]);
+        item = this.shownItems[i];
         delete this.shownItems[i];
+        this.leavingItems.push(item);
+        item.isShown = false;
       }
     }
 
@@ -69,20 +74,30 @@ export class ListVirtualScroll {
     // Iterate the set of items that will be rendered, using the
     // index from the actual items list as the map for the
     // virtual items we draw
-    for(let i = topIndex, realIndex = 0; i < bottomIndex && i < items.length; i++, realIndex++) {
+    for(let i = topIndex; i < bottomIndex && i < items.length; i++) {
       item = items[i];
-      console.log('Drawing item', i, item.title);
+      //console.log('Drawing item', i, item.title);
 
       shownItemRef = this.shownItems[i];
 
       // Is this a new item?
       if(!shownItemRef) {
-        let itemView = this.viewContainer.create(this.list.itemTemplate.protoViewRef, realIndex);
+        /*
+        let itemView = this.viewContainer.create(this.list.itemTemplate.protoViewRef, Math.min(this.shownItems.length, i));
+        */
+        let el = document.createElement('div');
+        el.innerHTML = this.itemTemplate(item);
 
+        let child = el.children[0];
+
+        this.viewportElement.appendChild(child);
+
+        /*
         itemView.setLocal('\$implicit', item);
         itemView.setLocal('\$item', item);
+        */
 
-        shownItemRef = new VirtualItemRef(item, i, realIndex, itemView);
+        shownItemRef = new VirtualItemRef(item, i, i, child);//, itemView);
 
         this.shownItems[i] = shownItemRef;
         this.enteringItems.push(shownItemRef);
@@ -95,12 +110,13 @@ export class ListVirtualScroll {
 
     while(this.leavingItems.length) {
       let itemRef = this.leavingItems.pop();
-      console.log('Removing item', itemRef.item, itemRef.realIndex);
-      this.viewContainer.remove(itemRef.realIndex);
+      //console.log('Removing item', itemRef.item, itemRef.realIndex);
+      //this.viewContainer.remove(itemRef.realIndex);
+      itemRef.domElement.parentNode.removeChild(itemRef.domElement);
     }
 
-    console.log('VIRTUAL SCROLL: scroll(scrollTop:', st, 'topIndex:', topIndex, 'bottomIndex:', bottomIndex, ')');
-    console.log('Container has', this.list.domElement.children.length, 'children');
+    //console.log('VIRTUAL SCROLL: scroll(scrollTop:', st, 'topIndex:', topIndex, 'bottomIndex:', bottomIndex, ')');
+    //console.log('Container has', this.list.domElement.children.length, 'children');
   }
 
   cellAtIndex(index) {
@@ -110,10 +126,12 @@ export class ListVirtualScroll {
 }
 
 class VirtualItemRef {
-  constructor(item, index, realIndex, view) {
+  constructor(item, index, realIndex, domElement) {//, view) {
     this.item = item;
     this.index = index;
     this.realIndex = realIndex;
-    this.view = view;
+    //this.view = view;
+    this.isShown = true;
+    this.domElement = domElement;
   }
 }

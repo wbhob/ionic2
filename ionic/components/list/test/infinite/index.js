@@ -3,7 +3,7 @@ import {Component, Directive} from 'angular2/src/core/annotations_impl/annotatio
 import {View} from 'angular2/src/core/annotations_impl/view';
 import {Parent} from 'angular2/src/core/annotations_impl/visibility';
 
-import {Content, List, Item} from 'ionic/ionic';
+import {Content, List, Item, ItemCellTemplate} from 'ionic/ionic';
 
 
 @Component({ selector: 'ion-app' })
@@ -15,6 +15,10 @@ class IonicApp {
   constructor() {
     console.log('IonicApp Start')
 
+    this.itemTemplate = `
+    <ion-item style="height: 44px" class="item">{{title}}</ion-item>
+    `;
+
     this.items = []
     for(let i = 0; i < 1000; i++) {
       this.items.push({
@@ -23,26 +27,6 @@ class IonicApp {
     }
   }
 }
-
-/*
-  Used to find and register headers in a view, and this directive's
-  content will be moved up to the common navbar location, and created
-  using the same context as the view's content area.
-*/
-@Directive({
-  selector: 'template[cell]'
-})
-export class ItemCellTemplate {
-  constructor(@Parent() list: List, viewContainer: ViewContainerRef, protoViewRef: ProtoViewRef) {
-    console.log('Item cell template', list, viewContainer, protoViewRef);
-
-    this.protoViewRef = protoViewRef;
-    this.viewContainer = viewContainer;
-
-    list.setItemTemplate(this);
-  }
-}
-
 
 
 export function main() {
