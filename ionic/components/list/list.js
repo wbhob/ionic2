@@ -14,8 +14,7 @@ import * as util from 'ionic/util';
   properties: [
     'items',
     'virtual',
-    'content',
-    'itemTemplate: item-template'
+    'content'
   ]
 })
 @View({
@@ -37,7 +36,7 @@ export class List {
       console.log('Virtual?', this.virtual);
       console.log('Items?', this.items.length, 'of \'em');
       console.log('Item template', this.itemTemplate);
-      this.compiledItemTemplate = Handlebars.compile(this.itemTemplate);
+      //this.compiledItemTemplate = Handlebars.compile(this.itemTemplate);
 
 
       if(util.isDefined(this.virtual)) {
