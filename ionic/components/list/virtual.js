@@ -90,7 +90,7 @@ export class ListVirtualScroll {
 
         let child = el.children[0];
 
-        child.style[CSS.transform] = 'translateY(' + this.itemHeight * i + 'px)';
+        child.style[CSS.transform] = 'translateY(' + (this.itemHeight * i) + 'px)';
 
         this.viewportElement.appendChild(child);
 
