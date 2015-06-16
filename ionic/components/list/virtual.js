@@ -52,7 +52,7 @@ export class ListVirtualScroll {
     let st = event.target.scrollTop;
     let sh = event.target.scrollHeight;
 
-    let topIndex = Math.floor(st / this.itemHeight);
+    let topIndex = Math.max(0, Math.floor(st / this.itemHeight) - 10);
     let bottomIndex = Math.floor((st / this.itemHeight) + (this.itemsPerScreen + 10));
 
     let items = this.list.items;
