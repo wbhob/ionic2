@@ -16,11 +16,11 @@ class IonicApp {
     console.log('IonicApp Start')
 
     this.itemTemplate = `
-    <ion-item style="height: 44px" class="item">{{title}}</ion-item>
+    <ion-item style="height: 44px" class="item"><div class="item-content"><div class="item-label">{{title}}</div></div></ion-item>
     `;
 
     this.items = []
-    for(let i = 0; i < 1000; i++) {
+    for(let i = 0; i < 10000; i++) {
       this.items.push({
         title: 'Item ' + i
       })
