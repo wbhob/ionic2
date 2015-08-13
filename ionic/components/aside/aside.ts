@@ -1,4 +1,4 @@
-import {View, EventEmitter, ElementRef} from 'angular2/angular2';
+import {forwardRef, Component, Host, View, EventEmitter, ElementRef} from 'angular2/angular2';
 
 import {Ion} from '../ion';
 import {IonicConfig} from '../../config/config';
@@ -37,7 +37,8 @@ import {dom} from 'ionic/util'
   events: ['opening']
 })
 @View({
-  template: '<ng-content></ng-content>'
+  template: '<ng-content></ng-content><ion-aside-backdrop></ion-aside-backdrop>',
+  directives: [forwardRef(() => AsideBackdrop)]
 })
 export class Aside extends Ion {
 
@@ -55,6 +56,12 @@ export class Aside extends Ion {
   onInit() {
     super.onInit();
     this.contentElement = (this.content instanceof Node) ? this.content : this.content.getNativeElement();
+
+    /*
+    this.backdropElement = this.getNativeElement().querySelector('.aside-backdrop');
+
+    console.log('BACKDROP', this.backdropElement);
+    */
 
     this.gestureDelegate = this.getDelegate('gesture');
     this.typeDelegate = this.getDelegate('type');
@@ -113,4 +120,38 @@ export class Aside extends Ion {
     return this.setOpen(!this.isOpen);
   }
 
+}
+
+
+@Component({
+  selector: 'ion-aside-backdrop',
+  host: {
+    '[style.width]': 'width',
+    '[style.height]': 'height',
+    '[style.backgroundColor]': 'backgroundColor',
+    '(click)': 'clicked($event)'
+  ]
+})
+@View({
+  template: ''
+})
+export class AsideBackdrop extends Ion {
+  constructor(elementRef: ElementRef, ionicConfig: IonicConfig, @Host() aside: Aside) {
+    super(elementRef, ionicConfig);
+
+    aside.backdrop = this;
+
+    this.aside = aside;
+
+    this.backgroundColor = 'rgba(0,0,0,0)';
+  }
+  onInit() {
+    let ww = window.innerWidth;
+    let wh = window.innerHeight;
+    this.width = ww + 'px';
+    this.height = wh + 'px';
+  }
+  clicked(event) {
+    this.aside.close();
+  }
 }

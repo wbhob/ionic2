@@ -25,10 +25,10 @@ class AsideTargetGesture extends SlideEdgeGesture {
   }
   onSlide(slide, ev) {
     this.aside.setOpenAmt(slide.distance / slide.max);
-    this.aside.setTransform('translate3d(' + slide.distance + 'px,0,0)');
+    this.aside.setTransform(slide.distance);
   }
   onSlideEnd(slide, ev) {
-    this.aside.setTransform('');
+    this.aside.setTransform(null);
     this.aside.setSliding(false);
     if (Math.abs(ev.gesture.velocityX) > 0.2 || Math.abs(slide.delta) > Math.abs(slide.max) * 0.5) {
       this.aside.setOpen(!this.aside.isOpen);
@@ -78,10 +78,10 @@ class AsideGesture extends SlideEdgeGesture {
   }
   onSlide(slide, ev) {
     this.aside.setOpenAmt(slide.distance / slide.max);
-    this.aside.setTransform('translate3d(' + slide.distance + 'px,0,0)');
+    this.aside.setTransform(slide.distance);
   }
   onSlideEnd(slide, ev) {
-    this.aside.setTransform('');
+    this.aside.setTransform(null);
     this.aside.setSliding(false);
     if (Math.abs(ev.gesture.velocityX) > 0.2 || Math.abs(slide.delta) > Math.abs(slide.max) * 0.5) {
       this.aside.setOpen(!this.aside.isOpen);
@@ -116,7 +116,7 @@ export class RightAsideGesture extends LeftAsideGesture {
 
 export class TopAsideGesture extends AsideGesture {
   onSlide(slide, ev) {
-    this.aside.setTransform('translate3d(0,' + slide.distance + 'px,0)');
+    this.aside.setTransform(slide.distance);
   }
   getSlideBoundaries() {
     return {
