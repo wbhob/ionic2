@@ -21,7 +21,7 @@ import {
   Register,
   ShowWhen, HideWhen,
 
-  MaterialButton
+  MaterialButton, MaterialFAB, MaterialFABActions, MaterialFABAction
 } from '../ionic';
 
 
@@ -88,7 +88,10 @@ export const IonicDirectives = [
   forwardRef(() => TapDisabled),
 
   // Material
-  forwardRef(() => MaterialButton)
+  forwardRef(() => MaterialButton),
+  forwardRef(() => MaterialFAB),
+  forwardRef(() => MaterialFABActions),
+  forwardRef(() => MaterialFABAction)
 ];
 
 class IonicViewImpl extends View {

@@ -18,6 +18,7 @@ export * from 'ionic/components/show-hide-when/show-hide-when'
 
 // Material components/effects
 export * from 'ionic/components/material/button'
+export * from 'ionic/components/material/fab'
 export * from 'ionic/components/material/ripple'
 
 export * from 'ionic/components/modal/modal'
