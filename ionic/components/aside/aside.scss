@@ -100,6 +100,7 @@ $aside-shadow: -1px 0px 8px rgba(0, 0, 0, 0.2) !default;
 }
 
 ion-aside-backdrop {
+  display: none;
   z-index: $z-index-aside-backdrop;
   //transition: $aside-backdrop-transition;
   transform: translateX($aside-width);

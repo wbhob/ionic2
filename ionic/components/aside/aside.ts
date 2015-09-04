@@ -43,6 +43,8 @@ export class Aside extends Ion {
 
     this.opening = new EventEmitter('opening');
 
+    this.isOpen = false;
+
     //this.animation = new Animation(element.querySelector('backdrop'));
     /*
     this.contentClickFn = (e) => {
@@ -158,6 +160,9 @@ export class Aside extends Ion {
    * @return {Promise} TODO
    */
   setOpen(isOpen) {
+    this.isOpen = isOpen;
+    return this._type.setOpen(isOpen);
+    /*
     if (isOpen !== this.isOpen) {
       this.isOpen = isOpen;
       //this.setChanging(true);
@@ -172,6 +177,7 @@ export class Aside extends Ion {
         this._type.setOpen(isOpen)
       })
     }
+    */
   }
 
   /**
@@ -179,6 +185,7 @@ export class Aside extends Ion {
    * @return {TODO} TODO
    */
   open() {
+    console.log('OPEN');
     return this.setOpen(true);
   }
 
@@ -187,6 +194,7 @@ export class Aside extends Ion {
    * @return {TODO} TODO
    */
   close() {
+    console.log('CLOSE');
     return this.setOpen(false);
   }
 
@@ -247,6 +255,6 @@ export class AsideBackdrop extends Ion {
    * @param {TODO} event  TODO
    */
   clicked(event) {
-    this.aside.close();
+    //this.aside.close();
   }
 }

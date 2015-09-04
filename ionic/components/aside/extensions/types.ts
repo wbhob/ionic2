@@ -50,39 +50,46 @@ export class AsideType {
 
     aside.contentElement.classList.add('aside-content')
 
-    let animation = new Animation();
-    this.asideAnimation = new Animation(this.aside.getNativeElement());
-    this.contentAnimation = new Animation(this.aside.contentElement);
-    this.backdropAnimation = new Animation(this.aside.backdrop.getNativeElement());
-
-    if(this.movesAside) {
-      animation.add(this.asideAnimation);
-    }
-    if(this.movesContent) {
-      animation.add(this.contentAnimation);
-    }
-    if(this.movesBackdrop) {
-      animation.add(this.backdropAnimation);
-    }
-
-    //asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-    //backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
-    //animation.add(asideAnimation, backdropAnimation);
-
-    animation.duration(200);
-    animation.easing('ease');
-
-    this.animation = animation;
   }
   setOpen(open) {
-    this.asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-    this.contentAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-    this.backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
+    console.log('Opening', open, open ? 0 : this.aside.width(), open ? this.aside.width() : 0);
+    return new Promise((resolve, reject) => {
+      
+      let animation = new Animation();
+      this.asideAnimation = new Animation(this.aside.getNativeElement());
+      this.contentAnimation = new Animation(this.aside.contentElement);
+      this.backdropAnimation = new Animation(this.aside.backdrop.getNativeElement());
 
-    this.animation.play().then(() => {
-      if(!open) {
-        this.aside.getNativeElement().style.visibility = 'hidden';
+      if(this.movesAside) {
+        animation.add(this.asideAnimation);
       }
+      if(this.movesContent) {
+        animation.add(this.contentAnimation);
+      }
+      if(this.movesBackdrop) {
+        animation.add(this.backdropAnimation);
+      }
+
+      //asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+      //backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
+      //animation.add(asideAnimation, backdropAnimation);
+
+      animation.duration(200);
+      animation.easing('ease');
+
+      this.animation = animation;
+      this.asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+      this.contentAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+      this.backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
+
+      this.animation.play().then(() => {
+        resolve();
+        if(!open) {
+          //this.aside.getNativeElement().style.visibility = 'hidden';
+        }
+      }, () => {
+        reject();
+      });
     });
   }
   setTransform(t) {
