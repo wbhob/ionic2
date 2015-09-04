@@ -17,12 +17,16 @@ class IonicApp {
     this.storage = new Storage(LocalStorage);
   }
   get() {
-    let value = this.storage.get('name');
-    alert('Your name is: ' + value);
+    this.storage.get('name').then(value => {
+      alert('Your name is: ' + value);
+    });
   }
   set() {
     let name = prompt('Your name?');
 
     this.storage.set('name', name);
+  }
+  remove() {
+    this.storage.remove('name');
   }
 }

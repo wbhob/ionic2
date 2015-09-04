@@ -13,6 +13,9 @@ export class Storage {
   set(key, value) {
     return this._strategy.set(key, value);
   }
+  remove(key) {
+    return this._strategy.remove(key);
+  }
 }
 
 export class StorageStrategy {
@@ -20,6 +23,9 @@ export class StorageStrategy {
     throw Error("Not implemented");
   }
   set(key, value) {
+    throw Error("Not implemented");
+  }
+  remove(key) {
     throw Error("Not implemented");
   }
 }
