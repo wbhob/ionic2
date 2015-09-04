@@ -77,7 +77,7 @@ export class ListVirtualScroll {
 
       // Is this a new item?
       if(!shownItemRef) {
-        let itemView = this.viewContainer.create(this.list.itemTemplate.protoViewRef, realIndex);
+        let itemView = this.viewContainer.createHostView(this.list.itemTemplate.protoViewRef, realIndex);
 
         itemView.setLocal('\$implicit', item);
         itemView.setLocal('\$item', item);

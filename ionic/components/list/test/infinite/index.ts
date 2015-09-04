@@ -1,26 +1,7 @@
-import {ProtoViewRef, ViewContainerRef} from 'angular2/angular2'
+import {TemplateRef, ViewContainerRef} from 'angular2/angular2'
 import {Directive, Host, forwardRef} from 'angular2/angular2';
 
-import {App, List} from 'ionic/ionic';
-
-
-
-@App({
-  templateUrl: 'main.html',
-  directives: [forwardRef(() => ItemCellTemplate)]
-})
-class IonicApp {
-  constructor() {
-
-    this.items = []
-    for(let i = 0; i < 1000; i++) {
-      this.items.push({
-        title: 'Item ' + i
-      })
-    }
-  }
-}
-
+import {App, IonicApp, IonicView, List} from 'ionic/ionic';
 
 /*
   Used to find and register headers in a view, and this directive's
@@ -31,12 +12,28 @@ class IonicApp {
   selector: 'template[cell]'
 })
 export class ItemCellTemplate {
-  constructor(@Host() list: List, viewContainer: ViewContainerRef, protoViewRef: ProtoViewRef) {
+  constructor(@Host() list: List, viewContainer: ViewContainerRef, protoViewRef: TemplateRef) {
     console.log('Item cell template', list, viewContainer, protoViewRef);
 
     this.protoViewRef = protoViewRef;
     this.viewContainer = viewContainer;
 
     list.setItemTemplate(this);
+  }
+}
+
+@App({
+  templateUrl: 'main.html',
+  directives: [ItemCellTemplate]
+})
+class E2EApp {
+  constructor() {
+
+    this.items = []
+    for(let i = 0; i < 1000; i++) {
+      this.items.push({
+        title: 'Item ' + i
+      })
+    }
   }
 }
