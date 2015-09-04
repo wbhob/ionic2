@@ -12,7 +12,7 @@ export * from './platform/registry'
 
 export * from './storage/storage'
 export * from './storage/local-storage'
-export * from './storage/sqlite'
+export * from './storage/sql'
 
 export * from './util/click-block'
 export * from './util/focus'
