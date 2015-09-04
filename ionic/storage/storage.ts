@@ -1,0 +1,25 @@
+/**
+ * Storage is an easy way to store key/value pairs and other complicated
+ * data in a way that uses the best possible storage layer underneath.
+ */
+export class Storage {
+  constructor(strategyCls: StorageStrategy) {
+    console.log(strategyCls);
+    this._strategy = new strategyCls();
+  }
+  get(key) {
+    return this._strategy.get(key);
+  }
+  set(key, value) {
+    return this._strategy.set(key, value);
+  }
+}
+
+export class StorageStrategy {
+  get(key, value) {
+    throw Error("Not implemented");
+  }
+  set(key, value) {
+    throw Error("Not implemented");
+  }
+}
