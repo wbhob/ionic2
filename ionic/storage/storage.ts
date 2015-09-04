@@ -4,7 +4,6 @@
  */
 export class Storage {
   constructor(strategyCls: StorageStrategy) {
-    console.log(strategyCls);
     this._strategy = new strategyCls();
   }
   get(key) {

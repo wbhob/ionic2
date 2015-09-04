@@ -51,7 +51,7 @@ export class SQLStorage extends StorageStrategy {
   // Initialize the DB with our required tables
   _tryInit() {
     this._db.transaction((tx) => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (id integer primary key, key text, value text)', [], (tx, res) => {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (key text primary key, value text)', [], (tx, res) => {
       }, (tx, err) => {
         console.error('Storage: Unable to create initial storage tables', tx, err);
       });
@@ -64,11 +64,11 @@ export class SQLStorage extends StorageStrategy {
 
         this._db.transaction(tx => {
           tx.executeSql("select key, value from kv where key = ? limit 1", [key], (tx, res) => {
-            let item = null;
             if(res.rows.length > 0) {
-              item = res.rows.item(0);
+              let item = res.rows.item(0);
+              resolve(item.value);
             }
-            resolve(item);
+            resolve(null);
           }, (tx, err) => {
             reject({
               tx: tx,
@@ -87,8 +87,18 @@ export class SQLStorage extends StorageStrategy {
   set(key, value) {
     return new Promise((resolve, reject) => {
       try {
-        window.localStorage.setItem(key, value);
-        resolve();
+        this._db.transaction(tx => {
+          tx.executeSql('insert or replace into kv(key, value) values (?, ?)', [key, value], (tx, res) => {
+            resolve();
+          }, (tx, err) => {
+            reject({
+              tx: tx,
+              err: err
+            });
+          })
+        }, err => {
+          reject(err);
+        });
       } catch(e) {
         reject(e);
       }
@@ -97,11 +107,22 @@ export class SQLStorage extends StorageStrategy {
   remove(key) {
     return new Promise((resolve, reject) => {
       try {
-        window.localStorage.removeItem(key);
-        resolve();
+        this._db.transaction(tx => {
+          tx.executeSql('delete from kv where key = ?', [key], (tx, res) => {
+            resolve();
+          }, (tx, err) => {
+            reject({
+              tx: tx,
+              err: err
+            });
+          })
+        }, err => {
+          reject(err);
+        });
       } catch(e) {
         reject(e);
       }
     });
+
   }
 }

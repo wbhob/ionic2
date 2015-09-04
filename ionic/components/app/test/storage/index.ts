@@ -3,8 +3,6 @@ import {Control, ControlGroup} from 'angular2/forms';
 
 import {App, Http, Storage, LocalStorage, SQLStorage} from 'ionic/ionic';
 
-console.log('Storage', Storage);
-
 let testUrl = 'https://ionic-api-tester.herokuapp.com/json';
 let testUrl404 = 'https://ionic-api-tester.herokuapp.com/404';
 
