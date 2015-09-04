@@ -24,19 +24,6 @@ import {dom} from 'ionic/util'
     'side': 'left',
     'type': 'reveal'
   },
-  delegates: {
-    gesture: [
-      //[instance => instance.side == 'top', gestures.TopAsideGesture],
-      //[instance => instance.side == 'bottom', gestures.BottomAsideGesture],
-      [instance => instance.side == 'right', gestures.RightAsideGesture],
-      [instance => instance.side == 'left', gestures.LeftAsideGesture],
-    ],
-    type: [
-      [instance => instance.type == 'overlay', types.AsideTypeOverlay],
-      [instance => instance.type == 'reveal', types.AsideTypeReveal],
-      //[instance => instance.type == 'push', types.AsideTypePush],
-    ]
-  },
   events: ['opening']
 })
 @View({
@@ -57,22 +44,27 @@ export class Aside extends Ion {
     this.opening = new EventEmitter('opening');
 
     //this.animation = new Animation(element.querySelector('backdrop'));
+    /*
     this.contentClickFn = (e) => {
       if(!this.isOpen || this.isChanging) { return; }
       this.close();
     };
+    */
 
 
+    /*
     this.finishChanging = util.debounce(() => {
       this.setChanging(false);
     });
 
     // TODO: Use Animation Class
     this.getNativeElement().addEventListener('transitionend', ev => {
+      console.log('Transition end');
       //this.setChanging(false)
       clearTimeout(this.setChangeTimeout);
       this.setChangeTimeout = setInterval(this.finishChanging, 400);
     })
+    */
   }
 
   /**
@@ -89,24 +81,43 @@ export class Aside extends Ion {
     super.onInit();
     this.contentElement = (this.content instanceof Node) ? this.content : this.content.getNativeElement();
 
+    this._initGesture();
+    this._initType();
+
     if(this.contentElement) {
+      /*
       this.contentElement.addEventListener('transitionend', ev => {
         //this.setChanging(false)
         clearTimeout(this.setChangeTimeout);
         this.setChangeTimeout = setInterval(this.finishChanging, 400);
       })
-      this.contentElement.addEventListener('click', this.contentClickFn);
+      */
+      //this.contentElement.addEventListener('click', this.contentClickFn);
     } else {
       console.error('Aside: must have a [content] element to listen for drag events on. Supply one like this:\n\n<ion-aside [content]="content"></ion-aside>\n\n<ion-content #content>');
     }
-
-
-    this.gestureDelegate = this.getDelegate('gesture');
-    this.typeDelegate = this.getDelegate('type');
   }
 
   onDestroy() {
-    this.contentElement.removeEventListener('click', this.contentClickFn);
+    //this.contentElement.removeEventListener('click', this.contentClickFn);
+  }
+
+  _initGesture() {
+    switch(this.side) {
+      case 'right':
+        this._gesture = new gestures.RightAsideGesture(this);
+      case 'left':
+        this._gesture = new gestures.LeftAsideGesture(this);
+    }
+  }
+
+  _initType() {
+    switch(this.type) {
+      case 'reveal':
+        this._type = new types.AsideTypeReveal(this);
+      case 'overlay':
+        this._type = new types.AsideTypeOverlay(this);
+    }
   }
 
   /**
@@ -130,7 +141,7 @@ export class Aside extends Ion {
    * @param {boolean} willOpen  TODO
    */
   setDoneTransforming(willOpen) {
-    this.typeDelegate.setDoneTransforming(willOpen);
+    this._type.setDoneTransforming(willOpen);
   }
 
   /**
@@ -138,33 +149,7 @@ export class Aside extends Ion {
    * @param {TODO} transform  TODO
    */
   setTransform(transform) {
-    this.typeDelegate.setTransform(transform)
-  }
-
-  /**
-   * TODO
-   * @param {boolean} isSliding  TODO
-   */
-  setSliding(isSliding) {
-    if (isSliding !== this.isSliding) {
-      this.typeDelegate.setSliding(isSliding)
-    }
-  }
-
-  /**
-   * TODO
-   * @param {boolean} isChanging  TODO
-   */
-  setChanging(isChanging) {
-
-    // Stop any last changing end operations
-    clearTimeout(this.setChangeTimeout);
-
-    if (isChanging !== this.isChanging) {
-      this.isChanging = isChanging
-      this.getNativeElement().classList[isChanging ? 'add' : 'remove']('changing');
-
-    }
+    this._type.setTransform(transform)
   }
 
   /**
@@ -175,13 +160,16 @@ export class Aside extends Ion {
   setOpen(isOpen) {
     if (isOpen !== this.isOpen) {
       this.isOpen = isOpen;
-      this.setChanging(true);
+      //this.setChanging(true);
 
       // Set full or closed amount
       this.setOpenAmt(isOpen ? 1 : 0);
 
+      console.log('Setting open', isOpen);
+      console.trace();
+
       return dom.rafPromise().then(() => {
-        this.typeDelegate.setOpen(isOpen)
+        this._type.setOpen(isOpen)
       })
     }
   }

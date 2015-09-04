@@ -1,12 +1,9 @@
 import {Aside} from 'ionic/components/aside/aside';
-import {Animtion} from 'ionic/aside/aside';
+import {Animation} from 'ionic/animations/animation';
 import {CSS} from 'ionic/util/dom'
 
 // TODO use setters instead of direct dom manipulation
 const asideManipulator = {
-  setSliding(sliding) {
-    this.aside.getNativeElement().classList[sliding ? 'add' : 'remove']('no-transition');
-  },
   setOpen(open) {
     this.aside.getNativeElement().classList[open ? 'add' : 'remove']('open');
   },
@@ -19,9 +16,6 @@ const asideManipulator = {
   }
 }
 const contentManipulator = {
-  setSliding(sliding) {
-    this.aside.contentElement.classList[sliding ? 'add' : 'remove']('no-transition');
-  },
   setOpen(open) {
     this.aside.contentElement.classList[open ? 'add' : 'remove'](
       `aside-open-${this.aside.side}`
@@ -37,88 +31,74 @@ const contentManipulator = {
 }
 
 const backdropManipulator = {
-  setSliding(sliding) {
-    this.aside.backdrop.isTransitioning = sliding;
-    //.classList[sliding ? 'add' : 'remove']('no-transition');
-  },
   setOpen(open) {
-    let amt = open ? 0.5 : 0;
+    let amt = open ? 0.5 : 0.01;
     this.aside.backdrop.opacity = amt;
   },
   setTransform(t) {
     if(t === null) {
       t = this.aside.width();
     }
-    let fade = 0.5 * t / this.aside.width();
+    let fade = Math.max(0.01, 0.5 * t / this.aside.width());
     this.aside.backdrop.opacity = fade;
   }
 }
 
 export class AsideType {
-  constructor(aside: Aside) {
+  constructor(aside: Aside, private movesAside, private movesContent, private movesBackdrop) {
     this.aside = aside;
 
-    setTimeout(() => {
-      aside.contentElement.classList.add('aside-content')
-    })
+    aside.contentElement.classList.add('aside-content')
+
+    let animation = new Animation();
+    this.asideAnimation = new Animation(this.aside.getNativeElement());
+    this.contentAnimation = new Animation(this.aside.contentElement);
+    this.backdropAnimation = new Animation(this.aside.backdrop.getNativeElement());
+
+    if(this.movesAside) {
+      animation.add(this.asideAnimation);
+    }
+    if(this.movesContent) {
+      animation.add(this.contentAnimation);
+    }
+    if(this.movesBackdrop) {
+      animation.add(this.backdropAnimation);
+    }
+
+    //asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+    //backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
+    //animation.add(asideAnimation, backdropAnimation);
+
+    animation.duration(200);
+    animation.easing('ease');
+
+    this.animation = animation;
+  }
+  setOpen(open) {
+    this.asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+    this.contentAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
+    this.backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
+
+    this.animation.play().then(() => {
+      if(!open) {
+        this.aside.getNativeElement().style.visibility = 'hidden';
+      }
+    });
+  }
+  setTransform(t) {
+  }
+  setDoneTransforming(willOpen) {
   }
 }
 
 export class AsideTypeOverlay extends AsideType {
-  setSliding(sliding) {
-    asideManipulator.setSliding.call(this, sliding);
-    backdropManipulator.setSliding.call(this, sliding);
-  }
-  setOpen(open) {
-    asideManipulator.setOpen.call(this, open);
-    backdropManipulator.setOpen.call(this, open);
-  }
-  setTransform(t) {
-    asideManipulator.setTransform.call(this, t);
-    backdropManipulator.setTransform.call(this, t);
-  }
-  setDoneTransforming(willOpen) {
-    asideManipulator.setTransform.call(this, null);
-    backdropManipulator.setTransform.call(this, null);
-    asideManipulator.setOpen.call(this, willOpen);
-    backdropManipulator.setOpen.call(this, willOpen);
-  }
-}
-
-export class AsideTypePush extends AsideType {
-  setSliding(sliding) {
-    asideManipulator.setSliding.call(this, sliding);
-    contentManipulator.setSliding.call(this, sliding);
-  }
-  setOpen(open) {
-    asideManipulator.setOpen.call(this, open);
-    contentManipulator.setOpen.call(this, open);
-  }
-  setTransform(t) {
-    asideManipulator.setTransform.call(this, t);
-    contentManipulator.setTransform.call(this, t);
-  }
-  setDoneTransforming(willOpen) {
-    asideManipulator.setOpen.call(this, willOpen);
-    asideManipulator.setTransform.call(this, null);
-    contentManipulator.setOpen.call(this, willOpen);
-    contentManipulator.setTransform.call(this, null);
+  constructor(aside: Aside) {
+    super(aside, true /* moves aside */, false /* moves content */, true /* moves backdrop */);
   }
 }
 
 export class AsideTypeReveal extends AsideType {
-  setSliding(sliding) {
-    contentManipulator.setSliding.call(this, sliding);
-  }
-  setOpen(sliding) {
-    asideManipulator.setOpen.call(this, sliding);
-    contentManipulator.setOpen.call(this, sliding);
-  }
-  setTransform(t) {
-    contentManipulator.setTransform.call(this, t);
-  }
-  setDoneTransforming(willOpen) {
-    contentManipulator.setOpen.call(this, willOpen);
-    contentManipulator.setTransform.call(this, null);
+  constructor(aside: Aside) {
+    super(aside, false /* moves aside */, true /* moves content */, false /* moves backdrop */);
   }
 }

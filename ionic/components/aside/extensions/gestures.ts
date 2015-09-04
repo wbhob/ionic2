@@ -17,18 +17,20 @@ class AsideTargetGesture extends SlideEdgeGesture {
   }
   // Set CSS, then wait one frame for it to apply before sliding starts
   onSlideBeforeStart(slide, ev) {
+    /*
     this.aside.setSliding(true);
     this.aside.setChanging(true);
     return new Promise(resolve => {
       requestAnimationFrame(resolve);
     });
+    */
   }
   onSlide(slide, ev) {
     this.aside.setOpenAmt(slide.distance / slide.max);
     this.aside.setTransform(slide.distance);
   }
   onSlideEnd(slide, ev) {
-    this.aside.setSliding(false);
+    //this.aside.setSliding(false);
     if (Math.abs(ev.velocityX) > 0.2 || Math.abs(slide.delta) > Math.abs(slide.max) * 0.5) {
 
       this.aside.setOpen(!this.aside.isOpen);
@@ -74,8 +76,8 @@ class AsideGesture extends SlideEdgeGesture {
 
   // Set CSS, then wait one frame for it to apply before sliding starts
   onSlideBeforeStart(slide, ev) {
-    this.aside.setSliding(true);
-    this.aside.setChanging(true);
+    //this.aside.setSliding(true);
+    //this.aside.setChanging(true);
     return new Promise(resolve => {
       requestAnimationFrame(resolve);
     });
@@ -105,9 +107,16 @@ class AsideGesture extends SlideEdgeGesture {
   }
 }
 
-export class LeftAsideGesture extends AsideGesture {}
+export class LeftAsideGesture extends AsideGesture {
+  constructor(aside: Aside) {
+    super(aside);
+  }
+}
 
 export class RightAsideGesture extends LeftAsideGesture {
+  constructor(aside: Aside) {
+    super(aside);
+  }
   getElementStartPos(slide, ev) {
     return this.aside.isOpen ? slide.min : slide.max;
   }
