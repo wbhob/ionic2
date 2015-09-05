@@ -44,28 +44,13 @@ export class Aside extends Ion {
     this.opening = new EventEmitter('opening');
 
     this.isOpen = false;
+    this.openAmt = 0;
 
-    //this.animation = new Animation(element.querySelector('backdrop'));
     this.contentClickFn = (e) => {
       console.log(e);
       if(!this.isOpen || this.isChanging) { return; }
       this.close();
     };
-
-
-    /*
-    this.finishChanging = util.debounce(() => {
-      this.setChanging(false);
-    });
-
-    // TODO: Use Animation Class
-    this.getNativeElement().addEventListener('transitionend', ev => {
-      console.log('Transition end');
-      //this.setChanging(false)
-      clearTimeout(this.setChangeTimeout);
-      this.setChangeTimeout = setInterval(this.finishChanging, 400);
-    })
-    */
   }
 
   /**
@@ -105,6 +90,7 @@ export class Aside extends Ion {
         this._gesture = new gestures.LeftAsideGesture(this);
         break;
     }
+    this._targetGesture = new gestures.AsideTargetGesture(this);
   }
 
   _initType() {
@@ -134,6 +120,7 @@ export class Aside extends Ion {
    * @param {TODO} v  TODO
    */
   setOpenAmt(v) {
+    this.openAmt = v;
     this.opening.next(v);
   }
 
@@ -159,12 +146,20 @@ export class Aside extends Ion {
    * @return {Promise} TODO
    */
   setOpen(isOpen) {
-    this.isChanging = true;
+    console.log('Setting open', isOpen);
+    this.setChanging(true);
     return this._type.setOpen(isOpen).then((isOpen) => {
       this.isOpen = isOpen;
-      this.setOpenAmt(1);
-      this.isChanging = false;
+      this.setOpenAmt(isOpen ? 1 : 0);
+      this.setChanging(false);
     });
+  }
+
+  setChanging(isChanging) {
+    this.isChanging = isChanging;
+    if(isChanging) {
+      this.getNativeElement().style.visibility = 'visible';
+    }
   }
 
   /**

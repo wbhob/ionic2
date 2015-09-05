@@ -13,8 +13,8 @@ class AsideOverlayInAnimation extends Animation {
    this.backdropAnim = new Animation(aside.backdrop.getNativeElement());
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.backdropAnim.fromTo('opacity', 0.01, 0.5);
-   this.asideAnim.fromTo('translateX', '0px', aside.width() + 'px');
+   this.backdropAnim.fromTo('opacity', Math.max(0.01, aside.openAmt * 0.5), 0.5);
+   this.asideAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', aside.width() + 'px');
 
    this.add(this.backdropAnim, this.asideAnim);
  }
@@ -32,8 +32,8 @@ class AsideOverlayOutAnimation extends Animation {
    this.backdropAnim = new Animation(aside.backdrop.getNativeElement());
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.backdropAnim.fromTo('opacity', 0.5, 0.01);
-   this.asideAnim.fromTo('translateX', aside.width() + 'px',  '0px');
+   this.backdropAnim.fromTo('opacity', Math.max(aside.openAmt * 0.5, 0.01), 0.01);
+   this.asideAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px',  '0px');
 
    this.add(this.backdropAnim, this.asideAnim);
  }
@@ -50,7 +50,7 @@ class AsideRevealInAnimation extends Animation {
 
    this.contentAnim = new Animation(aside.contentElement);
 
-   this.contentAnim.fromTo('translateX', '0px', aside.width() + 'px');
+   this.contentAnim.fromTo('translateX', (aside.openamt * aside.width()) + 'px', aside.width() + 'px');
 
    this.add(this.contentAnim);
  }
@@ -67,7 +67,7 @@ class AsideRevealOutAnimation extends Animation {
 
    this.contentAnim = new Animation(aside.contentElement);
 
-   this.contentAnim.fromTo('translateX', aside.width() + 'px', '0px');
+   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', '0px');
 
    this.add(this.contentAnim);
  }
@@ -85,8 +85,8 @@ class AsidePushInAnimation extends Animation {
    this.contentAnim = new Animation(aside.contentElement);
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.asideAnim.fromTo('translateX', -aside.width() + 'px', '0px');
-   this.contentAnim.fromTo('translateX', '0px', aside.width() + 'px');
+   this.asideAnim.fromTo('translateX', -(aside.openAmt * aside.width()) + 'px', '0px');
+   this.contentAnim.fromTo('translateX', '0px', (aside.openAmt * aside.width()) + 'px');
 
    this.add(this.asideAnim, this.contentAnim);
  }
@@ -104,55 +104,14 @@ class AsidePushOutAnimation extends Animation {
    this.contentAnim = new Animation(aside.contentElement);
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.asideAnim.fromTo('translateX', '0px', -aside.width() + 'px');
-   this.contentAnim.fromTo('translateX', aside.width() + 'px', '0px');
+   this.asideAnim.fromTo('translateX', '0px', -(aside.openAmt * aside.width()) + 'px');
+   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', '0px');
 
    this.add(this.asideAnim, this.contentAnim);
  }
 }
 Animation.register('aside-push-out', AsidePushOutAnimation);
 
-// TODO use setters instead of direct dom manipulation
-const asideManipulator = {
-  setOpen(open) {
-    this.aside.getNativeElement().classList[open ? 'add' : 'remove']('open');
-  },
-  setTransform(t) {
-    if(t === null) {
-      this.aside.getNativeElement().style[CSS.transform] = '';
-    } else {
-      this.aside.getNativeElement().style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
-    }
-  }
-}
-const contentManipulator = {
-  setOpen(open) {
-    this.aside.contentElement.classList[open ? 'add' : 'remove'](
-      `aside-open-${this.aside.side}`
-    )
-  },
-  setTransform(t) {
-    if(t === null) {
-      this.aside.contentElement.style[CSS.transform] = '';
-    } else {
-      this.aside.contentElement.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
-    }
-  }
-}
-
-const backdropManipulator = {
-  setOpen(open) {
-    let amt = open ? 0.5 : 0.01;
-    this.aside.backdrop.opacity = amt;
-  },
-  setTransform(t) {
-    if(t === null) {
-      t = this.aside.width();
-    }
-    let fade = Math.max(0.01, 0.5 * t / this.aside.width());
-    this.aside.backdrop.opacity = fade;
-  }
-}
 
 export class AsideType {
   constructor(aside: Aside, private inAnimation, private outAnimation) {
@@ -173,9 +132,6 @@ export class AsideType {
       let anim;
       if(open) {
         anim = this.animationIn;
-        anim.onReady(() => {
-          this.aside.getNativeElement().style.visibility = 'visible';
-        });
       } else {
         anim = this.animationOut;
         anim.onFinish(() => {
@@ -190,8 +146,6 @@ export class AsideType {
       });
     });
   }
-  setTransform(t) {
-  }
   setDoneTransforming(willOpen) {
   }
 }
@@ -201,7 +155,20 @@ export class AsideTypeOverlay extends AsideType {
     super(aside, 'aside-overlay-in', 'aside-overlay-out');
   }
   setTransform(t) {
-    console.log('Transform', t);
+    console.log('Transforming', t);
+    // Aside
+    let asideEl = this.aside.getNativeElement();
+    if(t === null) {
+      asideEl.style[CSS.transform] = '';
+    } else {
+      asideEl.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+    }
+    // Backdrop
+    if(t === null) {
+      t = this.aside.width();
+    }
+    let fade = Math.max(0.01, 0.5 * t / this.aside.width());
+    this.aside.backdrop.opacity = fade;
   }
   setDoneTransforming(willOpen) {
 
@@ -212,9 +179,33 @@ export class AsideTypeReveal extends AsideType {
   constructor(aside: Aside) {
     super(aside, 'aside-reveal-in', 'aside-reveal-out');
   }
+  setTransform(t) {
+    // Content
+    if(t === null) {
+      this.aside.contentElement.style[CSS.transform] = '';
+    } else {
+      this.aside.contentElement.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+    }
+  }
 }
 export class AsideTypePush extends AsideType {
   constructor(aside: Aside) {
     super(aside, 'aside-push-in', 'aside-push-out');
+  }
+  setTransform(t) {
+    // Aside
+    let asideEl = this.aside.getNativeElement();
+    if(t === null) {
+      asideEl.style[CSS.transform] = '';
+    } else {
+      asideEl.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+    }
+
+    // Content
+    if(t === null) {
+      this.aside.contentElement.style[CSS.transform] = '';
+    } else {
+      this.aside.contentElement.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+    }
   }
 }
