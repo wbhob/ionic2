@@ -50,7 +50,7 @@ class AsideRevealInAnimation extends Animation {
 
    this.contentAnim = new Animation(aside.contentElement);
 
-   this.contentAnim.fromTo('translateX', (aside.openamt * aside.width()) + 'px', aside.width() + 'px');
+   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', aside.width() + 'px');
 
    this.add(this.contentAnim);
  }
@@ -85,8 +85,8 @@ class AsidePushInAnimation extends Animation {
    this.contentAnim = new Animation(aside.contentElement);
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.asideAnim.fromTo('translateX', -(aside.openAmt * aside.width()) + 'px', '0px');
-   this.contentAnim.fromTo('translateX', '0px', (aside.openAmt * aside.width()) + 'px');
+   this.asideAnim.fromTo('translateX', -aside.width() + (aside.openAmt * aside.width()) + 'px', '0px');
+   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', aside.width() + 'px');
 
    this.add(this.asideAnim, this.contentAnim);
  }
@@ -104,7 +104,7 @@ class AsidePushOutAnimation extends Animation {
    this.contentAnim = new Animation(aside.contentElement);
    this.asideAnim = new Animation(aside.getNativeElement());
 
-   this.asideAnim.fromTo('translateX', '0px', -(aside.openAmt * aside.width()) + 'px');
+   this.asideAnim.fromTo('translateX', -aside.width() + (aside.openAmt * aside.width()) + 'px', -aside.width() + 'px');
    this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', '0px');
 
    this.add(this.asideAnim, this.contentAnim);
@@ -191,14 +191,16 @@ export class AsideTypeReveal extends AsideType {
 export class AsideTypePush extends AsideType {
   constructor(aside: Aside) {
     super(aside, 'aside-push-in', 'aside-push-out');
+    this.w = aside.width();
   }
   setTransform(t) {
+    console.log('Transform', t);
     // Aside
     let asideEl = this.aside.getNativeElement();
     if(t === null) {
       asideEl.style[CSS.transform] = '';
     } else {
-      asideEl.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+      asideEl.style[CSS.transform] = 'translate3d(' + (-this.w + t) + 'px,0,0)';
     }
 
     // Content
