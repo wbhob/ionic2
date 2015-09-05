@@ -25,8 +25,10 @@ $aside-shadow: -1px 0px 8px rgba(0, 0, 0, 0.2) !default;
   background: $aside-background;
 
   transform: translate3d(0, 0, 0);
-  //transition: $aside-transition;
 
+  // Hidden by default
+  visibility: hidden;
+  
   &.no-transition {
     ion-aside-backdrop {
       transition: none;
@@ -41,6 +43,9 @@ $aside-shadow: -1px 0px 8px rgba(0, 0, 0, 0.2) !default;
 
 
   &[type=reveal] {
+    left: 0;
+  }
+  &[type=push] {
     left: 0;
   }
 
@@ -71,33 +76,6 @@ $aside-shadow: -1px 0px 8px rgba(0, 0, 0, 0.2) !default;
       transform: translate3d(-$aside-width,0,0);
     }
   }
-
-  &[side=top] {
-    height: $aside-width;
-    top: -$aside-width;
-    left: 0;
-    right: 0;
-
-    transform: translate3d(0,0,0);
-    &.open,
-    &[type=reveal] {
-      transform: translate3d(0,$aside-width,0);
-    }
-  }
-
-  &[side=bottom] {
-    height: $aside-width;
-    top: 100%;
-    left: 0;
-    right: 0;
-
-    transform: translate3d(0,0,0);
-    &.open,
-    &.type-reveal {
-      transform: translate3d(0,-$aside-width,0);
-    }
-  }
-
 }
 
 ion-aside-backdrop {

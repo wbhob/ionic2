@@ -74,6 +74,44 @@ class AsideRevealOutAnimation extends Animation {
 }
 Animation.register('aside-reveal-out', AsideRevealOutAnimation);
 
+class AsidePushInAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.contentAnim = new Animation(aside.contentElement);
+   this.asideAnim = new Animation(aside.getNativeElement());
+
+   this.asideAnim.fromTo('translateX', -aside.width() + 'px', '0px');
+   this.contentAnim.fromTo('translateX', '0px', aside.width() + 'px');
+
+   this.add(this.asideAnim, this.contentAnim);
+ }
+}
+Animation.register('aside-push-in', AsidePushInAnimation);
+
+class AsidePushOutAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.contentAnim = new Animation(aside.contentElement);
+   this.asideAnim = new Animation(aside.getNativeElement());
+
+   this.asideAnim.fromTo('translateX', '0px', -aside.width() + 'px');
+   this.contentAnim.fromTo('translateX', aside.width() + 'px', '0px');
+
+   this.add(this.asideAnim, this.contentAnim);
+ }
+}
+Animation.register('aside-push-out', AsidePushOutAnimation);
+
 // TODO use setters instead of direct dom manipulation
 const asideManipulator = {
   setOpen(open) {
@@ -173,5 +211,10 @@ export class AsideTypeOverlay extends AsideType {
 export class AsideTypeReveal extends AsideType {
   constructor(aside: Aside) {
     super(aside, 'aside-reveal-in', 'aside-reveal-out');
+  }
+}
+export class AsideTypePush extends AsideType {
+  constructor(aside: Aside) {
+    super(aside, 'aside-push-in', 'aside-push-out');
   }
 }

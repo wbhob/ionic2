@@ -115,6 +115,9 @@ export class Aside extends Ion {
       case 'overlay':
         this._type = new types.AsideTypeOverlay(this);
         break;
+      case 'push':
+        this._type = new types.AsideTypePush(this);
+        break;
     }
   }
 
