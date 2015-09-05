@@ -40,6 +40,39 @@ class AsideOverlayOutAnimation extends Animation {
 }
 Animation.register('aside-overlay-out', AsideOverlayOutAnimation);
 
+class AsideRevealInAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.contentAnim = new Animation(aside.contentElement);
+
+   this.contentAnim.fromTo('translateX', '0px', aside.width() + 'px');
+
+   this.add(this.contentAnim);
+ }
+}
+Animation.register('aside-reveal-in', AsideRevealInAnimation);
+
+class AsideRevealOutAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.contentAnim = new Animation(aside.contentElement);
+
+   this.contentAnim.fromTo('translateX', aside.width() + 'px', '0px');
+
+   this.add(this.contentAnim);
+ }
+}
+Animation.register('aside-reveal-out', AsideRevealOutAnimation);
 
 // TODO use setters instead of direct dom manipulation
 const asideManipulator = {
@@ -84,30 +117,15 @@ const backdropManipulator = {
 }
 
 export class AsideType {
-  constructor(aside: Aside, private movesAside, private movesContent, private movesBackdrop) {
+  constructor(aside: Aside, private inAnimation, private outAnimation) {
     this.aside = aside;
 
     aside.contentElement.classList.add('aside-content')
-
   }
   setOpen(open) {
-  }
-  setTransform(t) {
-  }
-  setDoneTransforming(willOpen) {
-  }
-}
-
-export class AsideTypeOverlay extends AsideType {
-  constructor(aside: Aside) {
-    super(aside);
-
-    console.log('Overlay type create');
-  }
-  setOpen(open) {
-    this.animationIn = Animation.create(this.aside.getNativeElement(), 'aside-overlay-in');
+    this.animationIn = Animation.create(this.aside.getNativeElement(), this.inAnimation);
     this.animationIn.aside = this.aside;
-    this.animationOut = Animation.create(this.aside.getNativeElement(), 'aside-overlay-out');
+    this.animationOut = Animation.create(this.aside.getNativeElement(), this.outAnimation);
     this.animationOut.aside = this.aside;
 
 
@@ -137,12 +155,23 @@ export class AsideTypeOverlay extends AsideType {
   setTransform(t) {
   }
   setDoneTransforming(willOpen) {
+  }
+}
+
+export class AsideTypeOverlay extends AsideType {
+  constructor(aside: Aside) {
+    super(aside, 'aside-overlay-in', 'aside-overlay-out');
+  }
+  setTransform(t) {
+    console.log('Transform', t);
+  }
+  setDoneTransforming(willOpen) {
 
   }
 }
 
 export class AsideTypeReveal extends AsideType {
   constructor(aside: Aside) {
-    super(aside, false /* moves aside */, true /* moves content */, false /* moves backdrop */);
+    super(aside, 'aside-reveal-in', 'aside-reveal-out');
   }
 }

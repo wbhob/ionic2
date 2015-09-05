@@ -48,7 +48,7 @@ export class Aside extends Ion {
     //this.animation = new Animation(element.querySelector('backdrop'));
     this.contentClickFn = (e) => {
       console.log(e);
-      if(!this.isOpen) { return; }
+      if(!this.isOpen || this.isChanging) { return; }
       this.close();
     };
 
@@ -100,8 +100,10 @@ export class Aside extends Ion {
     switch(this.side) {
       case 'right':
         this._gesture = new gestures.RightAsideGesture(this);
+        break;
       case 'left':
         this._gesture = new gestures.LeftAsideGesture(this);
+        break;
     }
   }
 
@@ -109,8 +111,10 @@ export class Aside extends Ion {
     switch(this.type) {
       case 'reveal':
         this._type = new types.AsideTypeReveal(this);
+        break;
       case 'overlay':
         this._type = new types.AsideTypeOverlay(this);
+        break;
     }
   }
 
@@ -152,25 +156,12 @@ export class Aside extends Ion {
    * @return {Promise} TODO
    */
   setOpen(isOpen) {
+    this.isChanging = true;
     return this._type.setOpen(isOpen).then((isOpen) => {
       this.isOpen = isOpen;
+      this.setOpenAmt(1);
+      this.isChanging = false;
     });
-    /*
-    if (isOpen !== this.isOpen) {
-      this.isOpen = isOpen;
-      //this.setChanging(true);
-
-      // Set full or closed amount
-      this.setOpenAmt(isOpen ? 1 : 0);
-
-      console.log('Setting open', isOpen);
-      console.trace();
-
-      return dom.rafPromise().then(() => {
-        this._type.setOpen(isOpen)
-      })
-    }
-    */
   }
 
   /**
