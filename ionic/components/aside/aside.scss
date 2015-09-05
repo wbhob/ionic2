@@ -36,6 +36,7 @@ $aside-shadow: -1px 0px 8px rgba(0, 0, 0, 0.2) !default;
 
   &[type=overlay] {
     z-index: $z-index-aside-overlay;
+    box-shadow: 1px 2px 16px rgba(0, 0, 0, 0.3);
   }
 
 

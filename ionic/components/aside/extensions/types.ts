@@ -110,19 +110,25 @@ export class AsideTypeOverlay extends AsideType {
     this.animationOut = Animation.create(this.aside.getNativeElement(), 'aside-overlay-out');
     this.animationOut.aside = this.aside;
 
+
     return new Promise((resolve, reject) => {
       console.log('Playing', open);
 
-      let animPlay = this.animationIn.play.bind(this.animationIn);;
-      if(!open) {
-        animPlay = this.animationOut.play.bind(this.animationOut);
+      let anim;
+      if(open) {
+        anim = this.animationIn;
+        anim.onReady(() => {
+          this.aside.getNativeElement().style.visibility = 'visible';
+        });
+      } else {
+        anim = this.animationOut;
+        anim.onFinish(() => {
+          this.aside.getNativeElement().style.visibility = 'hidden';
+        });
       }
 
-      animPlay().then(() => {
-        resolve();
-        if(!open) {
-          //this.aside.getNativeElement().style.visibility = 'hidden';
-        }
+      anim.play().then(() => {
+        resolve(open);
       }, () => {
         reject();
       });

@@ -46,12 +46,11 @@ export class Aside extends Ion {
     this.isOpen = false;
 
     //this.animation = new Animation(element.querySelector('backdrop'));
-    /*
     this.contentClickFn = (e) => {
-      if(!this.isOpen || this.isChanging) { return; }
+      console.log(e);
+      if(!this.isOpen) { return; }
       this.close();
     };
-    */
 
 
     /*
@@ -87,14 +86,7 @@ export class Aside extends Ion {
     this._initType();
 
     if(this.contentElement) {
-      /*
-      this.contentElement.addEventListener('transitionend', ev => {
-        //this.setChanging(false)
-        clearTimeout(this.setChangeTimeout);
-        this.setChangeTimeout = setInterval(this.finishChanging, 400);
-      })
-      */
-      //this.contentElement.addEventListener('click', this.contentClickFn);
+      this.contentElement.addEventListener('click', this.contentClickFn);
     } else {
       console.error('Aside: must have a [content] element to listen for drag events on. Supply one like this:\n\n<ion-aside [content]="content"></ion-aside>\n\n<ion-content #content>');
     }
@@ -160,8 +152,9 @@ export class Aside extends Ion {
    * @return {Promise} TODO
    */
   setOpen(isOpen) {
-    this.isOpen = isOpen;
-    return this._type.setOpen(isOpen);
+    return this._type.setOpen(isOpen).then((isOpen) => {
+      this.isOpen = isOpen;
+    });
     /*
     if (isOpen !== this.isOpen) {
       this.isOpen = isOpen;
