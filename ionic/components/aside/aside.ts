@@ -181,7 +181,6 @@ export class Aside extends Ion {
    * @return {TODO} TODO
    */
   close() {
-    console.log('CLOSE');
     return this.setOpen(false);
   }
 
@@ -242,6 +241,6 @@ export class AsideBackdrop extends Ion {
    * @param {TODO} event  TODO
    */
   clicked(event) {
-    //this.aside.close();
+    this.aside.close();
   }
 }
