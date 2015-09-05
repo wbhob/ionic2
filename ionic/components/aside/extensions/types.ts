@@ -2,6 +2,45 @@ import {Aside} from 'ionic/components/aside/aside';
 import {Animation} from 'ionic/animations/animation';
 import {CSS} from 'ionic/util/dom'
 
+class AsideOverlayInAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.backdropAnim = new Animation(aside.backdrop.getNativeElement());
+   this.asideAnim = new Animation(aside.getNativeElement());
+
+   this.backdropAnim.fromTo('opacity', 0.01, 0.5);
+   this.asideAnim.fromTo('translateX', '0px', aside.width() + 'px');
+
+   this.add(this.backdropAnim, this.asideAnim);
+ }
+}
+Animation.register('aside-overlay-in', AsideOverlayInAnimation);
+
+class AsideOverlayOutAnimation extends Animation {
+ constructor(element) {
+   super(element);
+   this.easing('ease').duration(200);
+ }
+ set aside(aside) {
+   this._aside = aside;
+
+   this.backdropAnim = new Animation(aside.backdrop.getNativeElement());
+   this.asideAnim = new Animation(aside.getNativeElement());
+
+   this.backdropAnim.fromTo('opacity', 0.5, 0.01);
+   this.asideAnim.fromTo('translateX', aside.width() + 'px',  '0px');
+
+   this.add(this.backdropAnim, this.asideAnim);
+ }
+}
+Animation.register('aside-overlay-out', AsideOverlayOutAnimation);
+
+
 // TODO use setters instead of direct dom manipulation
 const asideManipulator = {
   setOpen(open) {
@@ -52,37 +91,34 @@ export class AsideType {
 
   }
   setOpen(open) {
-    console.log('Opening', open, open ? 0 : this.aside.width(), open ? this.aside.width() : 0);
+  }
+  setTransform(t) {
+  }
+  setDoneTransforming(willOpen) {
+  }
+}
+
+export class AsideTypeOverlay extends AsideType {
+  constructor(aside: Aside) {
+    super(aside);
+
+    console.log('Overlay type create');
+  }
+  setOpen(open) {
+    this.animationIn = Animation.create(this.aside.getNativeElement(), 'aside-overlay-in');
+    this.animationIn.aside = this.aside;
+    this.animationOut = Animation.create(this.aside.getNativeElement(), 'aside-overlay-out');
+    this.animationOut.aside = this.aside;
+
     return new Promise((resolve, reject) => {
-      
-      let animation = new Animation();
-      this.asideAnimation = new Animation(this.aside.getNativeElement());
-      this.contentAnimation = new Animation(this.aside.contentElement);
-      this.backdropAnimation = new Animation(this.aside.backdrop.getNativeElement());
+      console.log('Playing', open);
 
-      if(this.movesAside) {
-        animation.add(this.asideAnimation);
-      }
-      if(this.movesContent) {
-        animation.add(this.contentAnimation);
-      }
-      if(this.movesBackdrop) {
-        animation.add(this.backdropAnimation);
+      let animPlay = this.animationIn.play.bind(this.animationIn);;
+      if(!open) {
+        animPlay = this.animationOut.play.bind(this.animationOut);
       }
 
-      //asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-      //backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
-      //animation.add(asideAnimation, backdropAnimation);
-
-      animation.duration(200);
-      animation.easing('ease');
-
-      this.animation = animation;
-      this.asideAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-      this.contentAnimation.fromTo('translateX', (open ? 0 : this.aside.width()) + 'px', (open ? this.aside.width() : 0) + 'px');
-      this.backdropAnimation.fromTo('opacity', open ? 0.01 : 0.5, open ? 0.5 : 0.01);
-
-      this.animation.play().then(() => {
+      animPlay().then(() => {
         resolve();
         if(!open) {
           //this.aside.getNativeElement().style.visibility = 'hidden';
@@ -95,12 +131,7 @@ export class AsideType {
   setTransform(t) {
   }
   setDoneTransforming(willOpen) {
-  }
-}
 
-export class AsideTypeOverlay extends AsideType {
-  constructor(aside: Aside) {
-    super(aside, true /* moves aside */, false /* moves content */, true /* moves backdrop */);
   }
 }
 

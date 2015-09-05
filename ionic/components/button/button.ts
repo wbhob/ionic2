@@ -118,6 +118,7 @@ export class TapClick {
         let clickEvent = document.createEvent('MouseEvents');
         clickEvent.initMouseEvent('click', true, true, window, 1, 0, 0, endCoord.x, endCoord.y, false, false, false, false, 0, null);
         clickEvent.isIonicTap = true;
+        console.log('Dispatching event');
         this.ele.dispatchEvent(clickEvent);
       }
 
