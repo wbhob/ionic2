@@ -1,6 +1,7 @@
-import {Aside} from 'ionic/components/aside/aside';
+import {Aside} from '../aside/aside';
 import {Animation} from 'ionic/animations/animation';
-import {CSS} from 'ionic/util/dom'
+import {CSS} from 'ionic/util/dom';
+
 
 class AsideOverlayInAnimation extends Animation {
  constructor(element) {
@@ -50,7 +51,7 @@ class AsideRevealInAnimation extends Animation {
 
    this.contentAnim = new Animation(aside.contentElement);
 
-   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', aside.width() + 'px');
+   this.contentAnim.fromTo('translateX', '0px', aside.width() + 'px');
 
    this.add(this.contentAnim);
  }
@@ -67,7 +68,7 @@ class AsideRevealOutAnimation extends Animation {
 
    this.contentAnim = new Animation(aside.contentElement);
 
-   this.contentAnim.fromTo('translateX', (aside.openAmt * aside.width()) + 'px', '0px');
+   this.contentAnim.fromTo('translateX', aside.width() + 'px', '0px');
 
    this.add(this.contentAnim);
  }
@@ -114,18 +115,20 @@ Animation.register('aside-push-out', AsidePushOutAnimation);
 
 
 export class AsideType {
-  constructor(aside: Aside, private inAnimation, private outAnimation) {
+
+  constructor(aside: Aside, inAnimation, outAnimation) {
     this.aside = aside;
+
+    this.animationIn = Animation.create(aside.getNativeElement(), inAnimation);
+    this.animationIn.aside = aside;
+
+    this.animationOut = Animation.create(aside.getNativeElement(), outAnimation);
+    this.animationOut.aside = aside;
 
     aside.contentElement.classList.add('aside-content')
   }
+
   setOpen(open) {
-    this.animationIn = Animation.create(this.aside.getNativeElement(), this.inAnimation);
-    this.animationIn.aside = this.aside;
-    this.animationOut = Animation.create(this.aside.getNativeElement(), this.outAnimation);
-    this.animationOut.aside = this.aside;
-
-
     return new Promise((resolve, reject) => {
       console.log('Playing', open);
 
@@ -146,6 +149,12 @@ export class AsideType {
       });
     });
   }
+
+  setProgess(value) {
+    console.log('setProgess', value);
+    this.animationIn.progress(value);
+  }
+
   setDoneTransforming(willOpen) {
   }
 }
@@ -181,11 +190,11 @@ export class AsideTypeReveal extends AsideType {
   }
   setTransform(t) {
     // Content
-    if(t === null) {
-      this.aside.contentElement.style[CSS.transform] = '';
-    } else {
-      this.aside.contentElement.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
-    }
+    // if(t === null) {
+    //   this.aside.contentElement.style[CSS.transform] = '';
+    // } else {
+    //   this.aside.contentElement.style[CSS.transform] = 'translate3d(' + t + 'px,0,0)';
+    // }
   }
 }
 export class AsideTypePush extends AsideType {

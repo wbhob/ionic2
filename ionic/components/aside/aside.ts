@@ -140,6 +140,10 @@ export class Aside extends Ion {
     this._type.setTransform(transform)
   }
 
+  setProgess(value) {
+    this._type.setProgess(value);
+  }
+
   /**
    * Sets the state of the Aside to open or not.
    * @param {boolean} isOpen  If the Aside is open or not.

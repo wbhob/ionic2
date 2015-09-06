@@ -24,6 +24,7 @@ class AsideGenericGestureHandler extends SlideEdgeGesture {
   onSlide(slide, ev) {
     this.aside.setOpenAmt(slide.distance / slide.max);
     this.aside.setTransform(slide.distance);
+    this.aside.setProgess(slide.distance / slide.max);
   }
   onSlideEnd(slide, ev) {
     if (Math.abs(ev.velocityX) > 0.2 || Math.abs(slide.delta) > Math.abs(slide.max) * 0.5) {

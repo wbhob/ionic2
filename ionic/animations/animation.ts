@@ -503,6 +503,8 @@ class Animate {
         // to its "from" effects
         inlineStyle(self.ele, self.rate < 0 ? self.fromEffect : self.toEffect);
 
+        self.player = null;
+
         self.resolve();
       };
     }
