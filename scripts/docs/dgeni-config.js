@@ -13,6 +13,8 @@ var _ = require('lodash');
 module.exports = function(currentVersion){
 
   return new Package('ionic-v2-docs', [jsdocPackage, nunjucksPackage, typescriptPackage, linksPackage, gitPackage])
+
+.processor(require('./processors/latest-version'))
 .processor(require('./processors/index-page'))
 .processor(require('./processors/jekyll'))
 
@@ -34,22 +36,24 @@ module.exports = function(currentVersion){
   try {
     versions = fs.readdirSync(path.resolve(__dirname, '../../dist/ionic-site/docs'))
       .filter(semver.valid)
-      .sort(semver.rcompare);
   } catch(e) {
     versions = [];
   }
 
-  var versionData = {
-    list: versions,
-    current: _.find(versions, { name: currentVersion }),
-    latest: _.find(versions, {name: latestVersion}) || _.first(versions)
-  };
+  // new version, add it to the versions list
+  if (currentVersion != 'nightly' && !_.contains(versions, currentVersion)){
+    versions.unshift(currentVersion);
+  }
 
-  !_.contains(versions, currentVersion) && versions.unshift(currentVersion);
+  // sort by version so we can find latest
+  versions.sort(semver.rcompare);
+  // add nightly if it isn't in the list
   !_.contains(versions, 'nightly') && versions.unshift('nightly');
 
   //First semver valid version is latest
-  var latestVersion = _.find(versions, semver.valid);
+  var latestVersion = _.find(versions, function(v){
+    return semver.valid(v) && parseInt(v) < 2 // don't let v2 docs be latest for now
+  });
   versions = versions.map(function(version) {
     //Latest version is in docs root
     var folder = version == latestVersion ? '' : version;
@@ -72,11 +76,15 @@ module.exports = function(currentVersion){
   computePathsProcessor.pathTemplates = [{
     docTypes: ['class', 'var', 'function', 'let'],
     getOutputPath: function(doc) {
-      return 'docs/' + (versionData.current.folder || '') + '/api/' + doc.fileInfo.relativePath
-               // strip ionic from path root
-               .replace(/^ionic\//, '')
-               // replace extension with .html
-               .replace(/\.\w*$/, '.md');
+      // strip ionic from path root
+      var docPath = doc.fileInfo.relativePath.replace(/^ionic\//, '');
+      // remove filename since we have multiple docTypes per file
+      docPath = docPath.substring(0, docPath.lastIndexOf('/') + 1);
+      docPath += doc.name + '/index.md';
+      var path = 'docs/' + (versionData.current.folder || '') +
+                     '/api/' +  docPath;
+
+                    return path;
     }
   }];
 })

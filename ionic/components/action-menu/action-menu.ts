@@ -15,6 +15,44 @@ import {Animation} from '../../animations/animation';
 import * as util from 'ionic/util';
 
 
+/**
+ * @name ActionMenu
+ * @classdesc
+ * The Action Menu is a slide-up pane that lets the user choose from a set of options. Dangerous options are made obvious.
+ *
+ * There are easy ways to cancel out of the action sheet, such as tapping the backdrop or even hitting escape on the keyboard for desktop testing.
+ *
+ * @example
+ * ```ts
+ * openMenu() {
+ *
+ *   this.actionMenu.open({
+ *     buttons: [
+ *       { text: 'Share This' },
+ *       { text: 'Move' }
+ *     ],
+ *     destructiveText: 'Delete',
+ *     titleText: 'Modify your album',
+ *     cancelText: 'Cancel',
+ *     cancel: function() {
+ *       console.log('Canceled');
+ *     },
+ *     destructiveButtonClicked: () => {
+ *       console.log('Destructive clicked');
+ *     },
+ *     buttonClicked: function(index) {
+ *       console.log('Button clicked', index);
+ *       if(index == 1) { return false; }
+ *       return true;
+ *     }
+ *
+ *   }).then(actionMenuRef => {
+ *     this.actionMenuRef = actionMenuRef;
+ *   });
+ *
+ * }
+ * ```
+ */
 @View({
   template:
     '<backdrop (click)="_cancel()" tappable></backdrop>' +
@@ -23,16 +61,16 @@ import * as util from 'ionic/util';
         '<div class="action-menu-group action-menu-options">' +
           '<div class="action-menu-title" *ng-if="titleText">{{titleText}}</div>' +
           '<button (^click)="_buttonClicked(index)" *ng-for="#b of buttons; #index = index" class="action-menu-option">' +
-            '<icon class="icon" [name]="b.icon" *ng-if="b.icon"></icon> ' +
+            '<icon [name]="b.icon" *ng-if="b.icon"></icon> ' +
             '{{b.text}}' +
           '</button>' +
           '<button *ng-if="destructiveText" (click)="_destructive()" class="destructive action-menu-destructive">' +
-            '<icon class="icon" [name]="destructiveIcon" *ng-if="destructiveIcon"></icon> ' +
+            '<icon [name]="destructiveIcon" *ng-if="destructiveIcon"></icon> ' +
             '{{destructiveText}}</button>' +
         '</div>' +
         '<div class="action-menu-group action-menu-cancel" *ng-if="cancelText">' +
           '<button (click)="_cancel()">' +
-            '<icon class="icon" [name]="cancelIcon"></icon> ' +
+            '<icon [name]="cancelIcon"></icon> ' +
             '{{cancelText}}</button>' +
         '</div>' +
       '</div>' +
@@ -61,9 +99,6 @@ class ActionMenuDirective {
   }
 }
 
-/**
- * TODO
- */
 @Injectable()
 export class ActionMenu extends Overlay {
   /**

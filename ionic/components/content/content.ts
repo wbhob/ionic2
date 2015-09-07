@@ -7,7 +7,10 @@ import {ScrollTo} from '../../animations/scroll-to';
 import {hasFocusedTextInput} from '../../util/dom';
 
 /**
+ * @name ionContent
+ * @classdesc
  * TODO
+ *
  */
 @Component({
   selector: 'ion-content',
@@ -32,7 +35,8 @@ export class Content extends Ion {
   /**
    * TODO
    */
-  onIonInit() {
+  onInit() {
+    super.onInit();
     this.scrollElement = this.getNativeElement().children[0];
   }
 

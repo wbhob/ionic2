@@ -5,19 +5,20 @@ module.exports = function indexPage(renderDocsProcessor) {
     $runAfter: ['adding-extra-docs'],
     $runBefore: ['extra-docs-added'],
     $process: function(docs) {
+      //TODO(tlancina): move versionData into its own service
       var versionData = renderDocsProcessor.extraData.version;
       var currentVersion = versionData.current.name;
       var latestVersion = versionData.latest.name;
 
-      if (currentVersion == latestVersion) {
-        docs.push({
-          docType: 'index-page',
-          id: 'index-page',
-          currentVersion: currentVersion,
-          template: 'api_index.template.html',
-          outputPath: 'docs/api/index.md'
-        });
-      }
+      var versionPath = currentVersion == latestVersion ? '' : currentVersion;
+
+      docs.push({
+        docType: 'index-page',
+        id: 'index-page',
+        currentVersion: currentVersion,
+        template: 'api_index.template.html',
+        outputPath: 'docs/' + versionPath + '/api/index.md'
+      });
     }
   }
 };

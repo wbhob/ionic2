@@ -1,4 +1,4 @@
-/*! Ionic fork of normalize.css v3.0.2 | MIT License | github.com/necolas/normalize.css */
+/*! normalize.css v3.0.2 | MIT License | github.com/necolas/normalize.css */
 
 
 // HTML5 display definitions
@@ -86,6 +86,15 @@ samp {
 // 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
 //
 
+label,
+input,
+select,
+textarea {
+  line-height: normal;
+  font-family: inherit;
+}
+
+form,
 input,
 optgroup,
 select {

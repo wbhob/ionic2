@@ -11,7 +11,6 @@ export class Ion {
   constructor(elementRef: ElementRef, config: IonicConfig) {
     this.elementRef = elementRef;
     this.config = config;
-    this.clsMode = config.setting('mode');
   }
 
   onInit() {
@@ -45,8 +44,6 @@ export class Ion {
         this[prop] = cls.defaultProperties[prop];
       }
     }
-
-    this.onIonInit && this.onIonInit();
   }
 
   getDelegate(delegateName) {

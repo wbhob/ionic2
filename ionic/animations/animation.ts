@@ -155,7 +155,7 @@ export class Animation {
   }
 
   fadeIn() {
-    return this.fromTo('opacity', 0, 1);
+    return this.fromTo('opacity', 0.01, 1);
   }
 
   fadeOut() {
@@ -449,6 +449,11 @@ class Animate {
     // not using the direct API methods because they're still in flux
     // however, element.animate() seems locked in and uses the latest
     // and correct API methods under the hood, so really doesn't matter
+
+    if (!fromEffect) {
+      return console.error(ele.tagName, 'animation fromEffect required, toEffect:', toEffect);
+    }
+
     this.toEffect = parseEffect(toEffect);
 
     this.shouldAnimate = (duration > RENDER_DELAY);
@@ -457,7 +462,7 @@ class Animate {
       return inlineStyle(ele, this.toEffect);
     }
 
-    this.fill = fill || 'both';
+    this.fill = fill;
 
     this.ele = ele;
     this.promise = new Promise(res => { this.resolve = res; });
@@ -494,7 +499,11 @@ class Animate {
         duration: self.duration || 0,
         easing: self.easing,
         playbackRate: self.rate || 1,
+<<<<<<< HEAD
         fill: this.fill
+=======
+        fill: self.fill
+>>>>>>> master
       });
 
       self.player.onfinish = () => {
