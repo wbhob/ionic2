@@ -499,11 +499,7 @@ class Animate {
         duration: self.duration || 0,
         easing: self.easing,
         playbackRate: self.rate || 1,
-<<<<<<< HEAD
-        fill: this.fill
-=======
         fill: self.fill
->>>>>>> master
       });
 
       self.player.onfinish = () => {
