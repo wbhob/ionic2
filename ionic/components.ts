@@ -21,6 +21,8 @@ export * from 'ionic/components/show-hide-when/show-hide-when'
 export * from 'ionic/components/material/button'
 export * from 'ionic/components/material/ripple'
 
+export * from 'ionic/components/map/map'
+
 export * from 'ionic/components/modal/modal'
 export * from 'ionic/components/nav/nav'
 export * from 'ionic/components/nav/nav-controller'
