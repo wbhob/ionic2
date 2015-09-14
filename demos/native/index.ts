@@ -12,6 +12,7 @@ import {DevicePage} from 'pages/device';
 import {DeviceMotionPage} from 'pages/device-motion';
 import {DeviceOrientationPage} from 'pages/device-orientation';
 import {DialogsPage} from 'pages/dialogs';
+import {FilePage} from 'pages/file';
 import {GeolocationPage} from 'pages/geolocation';
 import {VibrationPage} from 'pages/vibration';
 
@@ -30,6 +31,7 @@ class MyApp {
       {title: 'Device Motion', page: DeviceMotionPage},
       {title: 'Device Orientation', page: DeviceOrientationPage},
       {title: 'Dialogs', page: DialogsPage},
+      //{title: 'File', page: FilePage},
       {title: 'Geolocation', page: GeolocationPage},
       {title: 'Contacts', page: ContactsPage},
       {title: 'Battery', page: BatteryPage},
