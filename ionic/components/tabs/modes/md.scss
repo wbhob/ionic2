@@ -45,6 +45,10 @@ $tab-bar-md-item-height:              4.8rem !default;
   }
 }
 
+[tab-bar-icons=hide] .tab-button-icon{
+  display: none
+}
+
 .tab-button.icon-only,
 .tab-button.has-title-only {
   padding: 6px 10px 6px 10px;
@@ -65,6 +69,3 @@ tab-highlight {
   }
 }
 
-[tab-bar-icons-display=hide] .tab-button-icon{
-  display: none
-}

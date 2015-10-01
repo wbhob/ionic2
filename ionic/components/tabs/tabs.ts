@@ -37,8 +37,7 @@ import * as dom from 'ionic/util/dom';
   selector: 'ion-tabs',
   defaultProperties: {
     'tabBarPlacement': 'bottom',
-    'tabBarIcons': 'top',
-    'tabBarIconsDisplay': 'show'
+    'tabBarIcons': 'top'
   }
 })
 @IonicView({
