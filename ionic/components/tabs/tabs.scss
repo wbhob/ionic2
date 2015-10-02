@@ -149,3 +149,8 @@ tab-bar {
 tab-highlight {
   display: none;
 }
+
+[tab-bar-icons=hide] .tab-button-icon {
+  display: none
+}
+
