@@ -1,8 +1,9 @@
 import {FORM_DIRECTIVES, FormBuilder, Validators, Control, ControlGroup} from 'angular2/forms';
 import {App, IonicApp, ActionSheet, NavController, NavParams} from 'ionic/ionic';
 import {Modal, IonicView, IonicConfig, Events, Animation} from 'ionic/ionic';
-import {NavigationDetailsPage} from 'navigation';
 
+import {NavigationDetailsPage} from 'navigation';
+import {MenuPage} from 'menu';
 import {TabsPage} from 'tabs';
 import {DemoModal} from 'modal';
 import * as helpers from 'helpers';
@@ -44,6 +45,9 @@ export class MainPage {
           this.component.title = helpers.toTitleCase(data.hash.replace('-', ' '));
           if (this.component.title === 'Tabs') {
             this.nav.setRoot(TabsPage);
+          }
+          if (this.component.title === 'Menus') {
+            this.nav.setRoot(MenuPage);
           }
         }
       });
