@@ -1,0 +1,30 @@
+<ion-content class="outer-content">
+  <ion-navbar *navbar>
+    <ion-nav-items primary>
+      <button>
+      Filter
+      </button>
+    </ion-nav-items>
+    <ion-nav-items secondary>
+    </ion-nav-items>
+    <ion-title>
+      <div class="segments">
+        <form [ng-form-model]="scheduleForm">
+          <ion-segment ng-control="scheduleShowing">
+            <ion-segment-button value="all">
+              All
+            </ion-segment-button>
+            <ion-segment-button value="favorites">
+              Favorites
+            </ion-segment-button>
+          </ion-segment>
+        </form>
+      </div>
+    </ion-title>
+  </ion-navbar>
+  <form [ng-form-model]="searchForm">
+    <ion-search-bar ng-control="searchQuery" placeholder="Search Schedule" show-cancel="true" [cancel-action]="cancelSearch"></ion-search-bar>
+  </form>
+
+  <my-component-list [data]="details"></my-component-list>
+</ion-content>
