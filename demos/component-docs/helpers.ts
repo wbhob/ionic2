@@ -1,3 +1,6 @@
+import {Directive, ElementRef, Optional, Host, NgFor, forwardRef, ViewContainerRef, Renderer} from 'angular2/angular2';
+
+import {Navbar, IonicPlatform} from 'ionic/ionic';
 import {ActionSheetPage} from './actionSheet/actionSheet';
 
 import {ButtonsPage,
@@ -30,6 +33,17 @@ import {PopupsPage} from './popups/popups';
 import {SlidesPage} from './slides/slides';
 import {TabsPage} from './tabs/tabs';
 
+@Directive({
+  selector: '.android-attr',
+})
+export class AndroidAttribute {
+
+    constructor (platform: IonicPlatform, elementRef: ElementRef, renderer: Renderer) {
+        this.isAndroid = platform.is('android');
+        renderer.setElementAttribute(elementRef, 'primary', this.isAndroid ? true : null);
+    }
+
+}
 
 export function toTitleCase(str) {
   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});

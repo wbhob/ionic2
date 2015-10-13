@@ -2,8 +2,9 @@ import {NavController, NavParams} from 'ionic/ionic';
 import {Page, Events} from 'ionic/ionic';
 import * as helpers from './helpers';
 
+
 @Page({
-  templateUrl: 'navigation/navigation-details.html'
+  templateUrl: 'navigation/navigation-details.html',
 })
 class NavigationDetailsPage {
   constructor(nav: NavController, params: NavParams, events: Events) {

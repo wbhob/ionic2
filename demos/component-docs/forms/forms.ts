@@ -1,10 +1,9 @@
 import {FORM_DIRECTIVES, FormBuilder, Validators, Control, ControlGroup} from 'angular2/angular2';
 import {Page} from 'ionic/ionic';
 
-
 @Page({
   templateUrl: 'forms/forms.html',
-  bindings: [FormBuilder]
+  bindings: [FormBuilder],
 })
 export class FormsPage {
 

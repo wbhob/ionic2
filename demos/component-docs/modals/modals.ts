@@ -1,9 +1,11 @@
 import {App, IonicApp, Animation, Modal, NavController, Page, Events} from 'ionic/ionic';
 import * as helpers from './helpers';
+import {AndroidAttribute} from '../helpers';
+
 
 
 @Page({
-  templateUrl: 'modals/modals.html'
+  templateUrl: 'modals/modals.html',
 })
 class ModalsFirstPage {
 
@@ -27,7 +29,7 @@ class ModalsFirstPage {
 }
 
 @Page({
-  templateUrl: 'modals/modals-content.html'
+  templateUrl: 'modals/modals-content.html',
 })
 class ModalsContentPage {
 
@@ -47,7 +49,7 @@ class ModalsContentPage {
 }
 
 @Page({
-  template: '<ion-nav [root]="rootView"></ion-nav>'
+  template: '<ion-nav [root]="rootView"></ion-nav>',
 })
 export class ModalsPage {
   constructor() {

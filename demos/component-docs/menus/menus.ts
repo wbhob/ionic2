@@ -2,8 +2,9 @@ import {App, IonicApp, Page, NavController, NavParams} from 'ionic/ionic';
 import {Page, Events} from 'ionic/ionic';
 import * as helpers from './helpers';
 
+
 @Page({
-  templateUrl: 'menus/menu-home.html'
+  templateUrl: 'menus/menu-home.html',
 })
 class PageOne{
   constructor(nav: NavController, events: Events) {
@@ -13,19 +14,19 @@ class PageOne{
 }
 
 @Page({
-  templateUrl: 'menus/menu-friends.html'
+  templateUrl: 'menus/menu-friends.html',
 })
 class PageTwo{
 }
 
 @Page({
-  templateUrl: 'menus/menu-events.html'
+  templateUrl: 'menus/menu-events.html',
 })
 class PageThree{
 }
 
 @Page({
-  templateUrl: 'menus/menus.html'
+  templateUrl: 'menus/menus.html',
 })
 export class MenusPage {
 

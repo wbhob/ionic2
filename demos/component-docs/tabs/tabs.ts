@@ -13,7 +13,7 @@ class TabOneCtrl {
 }
 
 @Page({
-  templateUrl: 'tabs/tabs.html'
+  templateUrl: 'tabs/tabs.html',
 })
 export class TabsPage {
   constructor(nav: NavController, params: NavParams) {

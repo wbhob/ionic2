@@ -1,3 +1,5 @@
+import {Directive, ElementRef, Optional, Host, NgFor, forwardRef, ViewContainerRef} from 'angular2/angular2';
+
 import {App, IonicApp, IonicPlatform, ActionSheet} from 'ionic/ionic';
 import {Page, IonicConfig, Events} from 'ionic/ionic';
 import {ActionSheetPage} from './actionSheet/actionSheet';
@@ -5,7 +7,8 @@ import * as helpers from './helpers';
 
 
 @App({
-  template: '<ion-nav id="nav" [root]="rootPage"></ion-nav><ion-overlay></ion-overlay>'
+  template: '<ion-nav id="nav" [root]="rootPage"></ion-nav><ion-overlay></ion-overlay>',
+  directives: [helpers.AndroidAttribute]
 })
 class DemoApp {
 
@@ -35,3 +38,4 @@ class DemoApp {
 
   }
 }
+
