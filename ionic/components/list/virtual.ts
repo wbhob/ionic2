@@ -77,12 +77,13 @@ export class ListVirtualScroll {
 
       // Is this a new item?
       if(!shownItemRef) {
-        let itemView = this.viewContainer.create(this.list.itemTemplate.protoViewRef, realIndex);
+        let itemView = this.viewContainer.createEmbeddedView(this.list.itemTemplate.protoViewRef, realIndex);
 
-        itemView.setLocal('\$implicit', item);
-        itemView.setLocal('\$item', item);
 
         shownItemRef = new VirtualItemRef(item, i, realIndex, itemView);
+
+        itemView.setLocal('\$implicit', shownItemRef.item);
+        itemView.setLocal('item', item);
 
         this.shownItems[i] = shownItemRef;
         this.enteringItems.push(shownItemRef);

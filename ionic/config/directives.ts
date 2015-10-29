@@ -13,6 +13,7 @@ import {Slides, Slide, SlideLazy} from '../components/slides/slides';
 import {Tabs} from '../components/tabs/tabs';
 import {Tab} from '../components/tabs/tab';
 import {List, ListHeader} from '../components/list/list';
+import {NgForVirtual} from '../components/list/ng-for-virtual';
 import {Item} from '../components/item/item';
 import {ItemGroup, ItemGroupTitle} from '../components/item/item-group';
 import {ItemSliding} from '../components/item/item-sliding';
@@ -56,6 +57,9 @@ export const IONIC_DIRECTIVES = [
   // Lists
   List,
   ListHeader,
+  NgForVirtual,
+
+  // Items
   Item,
   ItemGroup,
   ItemGroupTitle,

@@ -1,10 +1,24 @@
 <ion-content padding #content>
 
+  <!--
   <ion-list inset virtual [items]="items" [content]="content">
     <ion-item *cell #item>
+      {{item.title}}
+    </ion-item>
+  </ion-list>
+-->
+  <ion-list inset>
+    <ion-item *ng-for-virtual="#item of items">
       {{item.title}}
     </ion-item>
   </ion-list>
   <f style="height: 15000px; width: 100%; background-color: green"></f>
 
 </ion-content>
+
+<style>
+  .item {
+    position: absolute !important;
+    width: 100%;
+  }
+</style>
