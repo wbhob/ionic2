@@ -121,7 +121,7 @@ export class NgForVirtual implements DoCheck {
     let sh = event.target.scrollHeight;
 
     let topIndex = Math.floor(st / this.itemHeight);
-    let bottomIndex = Math.floor((st / this.itemHeight) + this.itemsPerScreen);
+    let bottomIndex = Math.floor((st / this.itemHeight) + (this.itemsPerScreen + 20));
 
     let items = this._ngForOf
 
@@ -140,37 +140,32 @@ export class NgForVirtual implements DoCheck {
     // Iterate the set of items that will be rendered, using the
     // index from the actual items list as the map for the
     // virtual items we draw
-    for(let i = topIndex, realIndex = 0; i < bottomIndex && i < items.length; i++, realIndex++) {
+    for(let i = topIndex; i < bottomIndex && i < items.length; i++) {
       item = items[i];
-      console.log('Drawing item', i, item.title);
-
       shownItemRef = this.shownItems[i];
+      console.log('Drawing item', i, item.title);
 
       // Is this a new item?
       if(!shownItemRef) {
-        let itemView = this.viewContainer.createEmbeddedView(this._templateRef, realIndex);
-        console.log('ITEM VIEW', itemView, itemView.render);
+        let itemView = this.viewContainer.createEmbeddedView(this._templateRef);
         itemView.render.boundElements[0].style[CSS.transform] = 'translateY(' + this.itemHeight * i + 'px)';
+        itemView.setLocal('\$implicit', item);
 
-
-        shownItemRef = new VirtualItemRef(item, i, realIndex, itemView);
-
-        itemView.setLocal('\$implicit', shownItemRef.item);
-        itemView.setLocal('item', item);
+        //shownItemRef = new RecordViewTuple(item, null);//VirtualItemRef(item, i, itemView);
+        shownItemRef = {
+          item: item,
+          view: itemView
+        }
 
         this.shownItems[i] = shownItemRef;
         this.enteringItems.push(shownItemRef);
       }
-
-
-      //tuple.view = viewContainer.create(protoViewRef, tuple.record.currentIndex);
-
     }
 
     while(this.leavingItems.length) {
       let itemRef = this.leavingItems.pop();
-      console.log('Removing item', itemRef.item, itemRef.realIndex);
-      this.viewContainer.remove(itemRef.realIndex);
+      console.log('Removing item', itemRef.item, itemRef.realIndex, this.viewContainer.indexOf(itemRef.view));
+      this.viewContainer.remove(this.viewContainer.indexOf(itemRef.view));
     }
 
     console.log('VIRTUAL SCROLL: scroll(scrollTop:', st, 'topIndex:', topIndex, 'bottomIndex:', bottomIndex, ')');
@@ -271,7 +266,6 @@ class VirtualItemRef {
   constructor(item, index, realIndex, view) {
     this.item = item;
     this.index = index;
-    this.realIndex = realIndex;
     this.view = view;
   }
 }
