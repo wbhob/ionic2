@@ -7,12 +7,16 @@
     </ion-item>
   </ion-list>
 -->
-  <ion-list inset>
+  <ion-list>
     <ion-item *ng-for-virtual="#item of items">
-      {{item.title}}
+     <ion-avatar item-left>
+       <img src="avatar-finn.png">
+     </ion-avatar>
+     <h2>{{item.title}}</h2>
+     <p>Mr. Hall was way harsh on my report card.</p>
     </ion-item>
   </ion-list>
-  <f style="height: 15000px; width: 100%; background-color: green"></f>
+  <f style="height: 15000px; width: 100%; background-color: white"></f>
 
 </ion-content>
 
