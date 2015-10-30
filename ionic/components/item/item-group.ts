@@ -2,7 +2,6 @@ import {Directive, ElementRef, Host, Optional} from 'angular2/angular2';
 import {Content} from '../content/content';
 import {throttle} from '../../util/util';
 import {position, offset, CSS, raf} from '../../util/dom';
-import {FeatureDetect} from '../../util/feature-detect';
 import {Config} from '../../config/config';
 
 /**
@@ -39,8 +38,11 @@ export class ItemGroupTitle {
    * TODO
    * @param {ElementRef} elementRef  TODO
    */
-  constructor(elementRef: ElementRef, config: Config) {
+  constructor(elementRef: ElementRef, config: Config, content: Content) {
     // make sure the sticky class gets set on the title
     this.isSticky = true;
+
+    console.log('Item group title', content);
+    content.getStickyPolyfill().add(elementRef.nativeElement);
   }
 }
