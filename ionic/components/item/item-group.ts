@@ -44,7 +44,7 @@ export class ItemGroupTitle {
     this.content = content;
     this.ele = elementRef.nativeElement;
     this.parent = this.ele.parentNode;
-    this.isCssValid = true;//featureDetect.has('positionsticky')
+    this.isCssValid = featureDetect.has('positionsticky')
   }
 
   onInit() {
@@ -83,12 +83,12 @@ export class ItemGroupTitle {
   }
 
   applyTransform(element, transformString) {
-   // do not apply the transformation if it is already applied
-   if (element.style[CSS.transform] == transformString) {
-   }
-   else {
-     element.style[CSS.transform] = transformString;
-   }
+    // do not apply the transformation if it is already applied
+    if (element.style[CSS.transform] == transformString) {
+    }
+    else {
+      element.style[CSS.transform] = transformString;
+    }
   }
 
   translateUp(element, dy, executeImmediately) {
