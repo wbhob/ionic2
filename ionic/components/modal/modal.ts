@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/angular2';
 
-import {OverlayController} from '../overlay/overlay-controller';
+import {OverlayController} from '../overlay/overlay';
 import {Config} from '../../config/config';
 import {Animation} from '../../animations/animation';
 import {extend} from 'ionic/util';

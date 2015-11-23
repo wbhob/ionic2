@@ -99,10 +99,10 @@ import {raf} from '../../util/dom';
  * - `onPageDidUnload` - Runs after the page has been destroyed and its elements have been removed.
  *
  */
-export class NavController extends Ion {
+export class NavController {
 
   constructor(
-    parentnavCtrl: NavController,
+    parentNavCtrl: NavController,
     app: IonicApp,
     config: Config,
     elementRef: ElementRef,
@@ -112,11 +112,10 @@ export class NavController extends Ion {
     zone: NgZone,
     renderer: Renderer
   ) {
-    super(elementRef, config);
-
-    this.parent = parentnavCtrl;
+    this.parent = parentNavCtrl;
     this.app = app;
     this.config = config;
+    this.elementRef = elementRef;
 
     this._compiler = compiler;
     this._loader = loader;

@@ -1,11 +1,11 @@
-import {bootstrap, provide} from 'angular2/angular2';
-import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
+import {bootstrap, provide, Injector} from 'angular2/angular2';
+import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, Router} from 'angular2/router';
 import {HTTP_PROVIDERS} from 'angular2/http';
 
 import {IonicApp} from '../components/app/app';
 import {Config} from './config';
 import {Platform} from '../platform/platform';
-import {OverlayController} from '../components/overlay/overlay-controller';
+import {OverlayController} from '../components/overlay/overlay';
 import {Form} from '../util/form';
 import {Keyboard} from '../util/keyboard';
 import {ActionSheet} from '../components/action-sheet/action-sheet';
@@ -18,6 +18,8 @@ import {ClickBlock} from '../util/click-block';
 import {FeatureDetect} from '../util/feature-detect';
 import {initTapClick} from '../components/tap-click/tap-click';
 import * as dom from '../util/dom';
+
+import {Injectable, ElementRef, Compiler, DynamicComponentLoader, AppViewManager, NgZone, Renderer} from 'angular2/angular2';
 
 
 export function ionicProviders(args={}) {
@@ -66,6 +68,23 @@ export function ionicProviders(args={}) {
     provide(LocationStrategy, {useClass: HashLocationStrategy}),
     HTTP_PROVIDERS,
   ];
+}
+
+
+export function getCurrentProviders(injector) {
+  let providers = [
+    LocationStrategy, Router,
+    IonicApp, Config, Platform, FeatureDetect, Events, NavRegistry, Form
+    Keyboard, OverlayController, ActionSheet, Modal, Popup, Translate,
+    Compiler, DynamicComponentLoader, AppViewManager, NgZone, Renderer
+  ];
+
+  let injected = [];
+  providers.forEach(provider => {
+    injected.push( provide(provider, {useValue: injector.get(provider)}) );
+  }
+
+  return Injector.resolve(injected);
 }
 
 

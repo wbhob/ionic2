@@ -2,8 +2,16 @@ import {App, Page, Config, Platform} from 'ionic/ionic';
 import {Modal, ActionSheet, NavController, NavParams, Animation} from 'ionic/ionic';
 
 
+class UserProvider {
+  getProviderId() {
+    return 19830224;
+  }
+}
+
+
 @App({
-  templateUrl: 'main.html'
+  templateUrl: 'main.html',
+  providers: [UserProvider]
 })
 class E2EApp {
 
@@ -57,12 +65,14 @@ class E2EApp {
   template: `
     <h3>Pass Params</h3>
     <p>User Id: {{userId}}</p>
+    <p>Provider Id: {{providerId}}</p>
     <p><button (click)="closeModal()">Close Modal</button></p>
   `
 })
 class ModalPassParams {
-  constructor(private modal: Modal, params: NavParams) {
+  constructor(private modal: Modal, params: NavParams, userProvider: UserProvider) {
     this.userId = params.get('userId');
+    this.providerId = userProvider.getProviderId();
   }
 
   closeModal() {

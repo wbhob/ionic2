@@ -1,6 +1,8 @@
-import {Component, bootstrap} from 'angular2/angular2'
+import {Component, bootstrap, DynamicComponentLoader, NgZone, Injector} from 'angular2/angular2'
 
-import * as util from 'ionic/util';
+import {IonicApp} from '../components/app/app';
+import {OverlayNav} from '../components/overlay/overlay';
+import {pascalCaseToDashCase} from '../util/util';
 import {ionicProviders} from './bootstrap';
 import {IONIC_DIRECTIVES} from './directives';
 
@@ -106,7 +108,7 @@ function appendConfig(cls, config) {
 
     // set the component "hostProperties", so the instance's
     // input value will be used to set the element's attribute
-    config.host['[attr.' + util.pascalCaseToDashCase(prop) + ']'] = prop;
+    config.host['[attr.' + pascalCaseToDashCase(prop) + ']'] = prop;
   }
 
   cls.delegates = config.delegates;
@@ -138,8 +140,12 @@ export function App(args={}) {
     // redefine with added annotations
     Reflect.defineMetadata('annotations', annotations, cls);
 
+    let appProviders = ionicProviders(args);
     console.time('bootstrap');
-    bootstrap(cls, ionicProviders(args)).then(() => {
+    bootstrap(cls, appProviders).then(ref => {
+      let app = ref.injector.get(IonicApp);
+      app.rootRef = ref;
+      debugger
       console.timeEnd('bootstrap');
     });
 

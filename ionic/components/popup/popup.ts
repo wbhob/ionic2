@@ -1,7 +1,7 @@
 import {FORM_DIRECTIVES, NgControl, NgControlGroup,
   Component, ElementRef, Injectable, NgClass, NgIf, NgFor, Renderer} from 'angular2/angular2';
 
-import {OverlayController} from '../overlay/overlay-controller';
+import {OverlayController} from '../overlay/overlay';
 import {Config} from '../../config/config';
 import {Animation} from '../../animations/animation';
 import {NavParams} from '../nav/nav-controller';

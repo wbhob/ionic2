@@ -7,7 +7,7 @@
 */
 import {Component, Injectable, Renderer, NgFor, NgIf} from 'angular2/angular2';
 
-import {OverlayController} from '../overlay/overlay-controller';
+import {OverlayController} from '../overlay/overlay';
 import {Config} from '../../config/config';
 import {Icon} from '../icon/icon';
 import {Animation} from '../../animations/animation';

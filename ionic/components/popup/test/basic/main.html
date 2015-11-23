@@ -1,5 +1,20 @@
+<ion-menu [content]="content">
 
-<ion-content padding>
+  <ion-toolbar>
+    <ion-title>Pages</ion-title>
+  </ion-toolbar>
+
+  <ion-content>
+    <ion-list>
+      <button ion-item *ng-for="#p of pages" (click)="openPage(p)">
+        {{p.title}}
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
+<ion-content padding #content>
 
   <button class="e2eOpenAlert" (click)="doAlert()">Alert</button>
   <button class="e2eOpenPrompt" (click)="doPrompt()">Prompt</button>
