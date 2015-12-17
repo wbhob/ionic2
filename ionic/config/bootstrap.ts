@@ -1,4 +1,6 @@
-import {provide, Provider} from 'angular2/core';
+import {provide, Provider, Renderer} from 'angular2/core';
+import {DomRenderer} from 'angular2/platform/common_dom';
+import {IonicDomRenderer} from './renderer';
 import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
 import {HTTP_PROVIDERS} from 'angular2/http';
 
@@ -19,6 +21,15 @@ import {FeatureDetect} from '../util/feature-detect';
 import {TapClick} from '../components/tap-click/tap-click';
 import {ClickBlock} from '../util/click-block';
 import {ready, closest} from '../util/dom';
+
+import {
+  DomRenderer,
+  DOCUMENT,
+  EVENT_MANAGER_PLUGINS,
+  EventManager,
+  DOM,
+  DomSharedStylesHost
+} from 'angular2/platform/common_dom';
 
 /**
  * @private
@@ -51,6 +62,9 @@ export function ionicProviders(args={}) {
   platform.prepareReady(config);
 
   return [
+    new Provider(DomRenderer, {useClass: IonicDomRenderer}),
+    new Provider(Renderer, {useExisting: DomRenderer}),
+
     IonicApp,
     provide(ClickBlock, {useValue: clickBlock}),
     provide(Config, {useValue: config}),
