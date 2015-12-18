@@ -58,7 +58,6 @@ export class Checkbox {
     @Optional() ngControl: NgControl,
     elementRef: ElementRef
   ) {
-    this.form = _form;
     _form.register(this);
 
     this.onChange = (_) => {};
@@ -75,7 +74,7 @@ export class Checkbox {
    */
   ngOnInit() {
     if (!this.id) {
-      this.id = 'chk-' + this.form.nextId();
+      this.id = 'chk-' + this._form.nextId();
     }
 
     this.labelId = 'lbl-' + this.id;
@@ -132,6 +131,6 @@ export class Checkbox {
    * @private
    */
   ngOnDestroy() {
-    this.form.deregister(this);
+    this._form.deregister(this);
   }
 }
