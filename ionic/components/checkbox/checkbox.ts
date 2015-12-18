@@ -54,12 +54,12 @@ import {Form} from '../../util/form';
 export class Checkbox {
 
   constructor(
-    private form: Form,
+    private _form: Form,
     @Optional() ngControl: NgControl,
     elementRef: ElementRef
   ) {
-    this.form = form;
-    form.register(this);
+    this.form = _form;
+    _form.register(this);
 
     this.onChange = (_) => {};
     this.onTouched = (_) => {};
