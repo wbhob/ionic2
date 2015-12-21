@@ -160,7 +160,6 @@ export class NavController extends Ion {
    * @private
    * @return {bool}
    */
-
   setTransitioning(isTransitioning, fallback=700) {
     this._trnsTime = (isTransitioning ? Date.now() + fallback : 0);
   }
@@ -230,27 +229,35 @@ export class NavController extends Ion {
    * @param {Object} [opts={}] Any options you want to use pass to transtion
    * @returns {Promise} Returns a promise when the transition is completed
    */
-  push(componentType, params = {}, opts = {}, callback) {
+  push(componentType, params = {}, opts = {}) {
     if (!componentType) {
       let errMsg = 'invalid componentType to push';
-      console.error(errMsg)
+      console.error(errMsg);
       return Promise.reject(errMsg);
-    }
-
-    if (typeof componentType !== 'function') {
-      throw 'Loading component must be a component class, not "' + componentType.toString() + '"';
     }
 
     if (this.isTransitioning()) {
       return Promise.reject('nav controller actively transitioning');
     }
 
-    this.setTransitioning(true, 500);
+    return new Promise(resolve => {
+      this.pushComponent(componentType, params = {}, opts = {}, resolve);
+    });
+  }
 
-    let promise = null;
-    if (!callback) {
-      promise = new Promise(res => { callback = res; });
+  /**
+   * Same as push method, except pushComponent returns the entering view's
+   * ViewController instance instead of a returning a promise. Additionall, the
+   * pushComponent method has a callback argument instead of returning a promise.
+   * @private
+   * @return {ViewController}
+   */
+  pushComponent(componentType, params = {}, opts = {}, callback) {
+    if (typeof componentType !== 'function') {
+      throw 'Loading component must be a component class, not "' + componentType.toString() + '"';
     }
+
+    this.setTransitioning(true, 500);
 
     // do not animate if this is the first in the stack
     if (!this._views.length && !opts.animateFirst) {
@@ -286,7 +293,7 @@ export class NavController extends Ion {
     // start the transition
     this._transition(enteringView, leavingView, opts, callback);
 
-    return promise;
+    return enteringView;
   }
 
   /**
@@ -482,6 +489,11 @@ export class NavController extends Ion {
     viewToRemove.shouldDestroy = true;
     this._cleanup();
     return Promise.resolve();
+  }
+
+  removePage(viewCtrl, opts = {}) {
+    let index = this.indexOf(viewCtrl);
+    return this.remove(index, opts);
   }
 
   /**

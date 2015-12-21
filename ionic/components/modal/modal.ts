@@ -1,6 +1,6 @@
 import {Injectable, Type} from 'angular2/core';
 
-import {OverlayController} from '../overlay/overlay-controller';
+import {OverlayManager} from '../overlay/overlay-controller';
 import {Config} from '../../config/config';
 import {Animation} from '../../animations/animation';
 import {extend} from '../../util';
@@ -42,7 +42,7 @@ import {extend} from '../../util';
 @Injectable()
 export class Modal {
 
-  constructor(ctrl: OverlayController, config: Config) {
+  constructor(ctrl: OverlayManager, config: Config) {
     this.ctrl = ctrl;
     this.config = config;
   }

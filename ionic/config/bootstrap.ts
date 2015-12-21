@@ -5,7 +5,7 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import {IonicApp} from '../components/app/app';
 import {Config} from './config';
 import {Platform} from '../platform/platform';
-import {OverlayController} from '../components/overlay/overlay-controller';
+import {OverlayManager} from '../components/overlay/overlay-controller';
 import {Form} from '../util/form';
 import {Keyboard} from '../util/keyboard';
 import {ActionSheet} from '../components/action-sheet/action-sheet';
@@ -61,7 +61,7 @@ export function ionicProviders(args={}) {
     TapClick,
     Form,
     Keyboard,
-    OverlayController,
+    OverlayManager,
     ActionSheet,
     Modal,
     Popup,

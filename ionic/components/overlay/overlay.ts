@@ -3,7 +3,7 @@ import {ChangeDetectorRef, Component, ElementRef, Compiler, AppViewManager, NgZo
 import {IonicApp} from '../app/app';
 import {Config} from '../../config/config';
 import {Keyboard} from '../../util/keyboard';
-import {OverlayController} from './overlay-controller';
+import {OverlayManager} from './overlay-controller';
 import {NavController} from '../nav/nav-controller';
 
 
@@ -17,7 +17,7 @@ import {NavController} from '../nav/nav-controller';
 export class OverlayNav extends NavController {
 
   constructor(
-    overlayCtrl: OverlayController,
+    overlayCtrl: OverlayManager,
     app: IonicApp,
     config: Config,
     keyboard: Keyboard,

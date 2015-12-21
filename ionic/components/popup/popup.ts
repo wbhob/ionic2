@@ -1,7 +1,7 @@
 import {Component, ElementRef, Injectable, Renderer} from 'angular2/core';
 import {NgClass, NgIf, NgFor, FORM_DIRECTIVES} from 'angular2/common';
 
-import {OverlayController} from '../overlay/overlay-controller';
+import {OverlayManager} from '../overlay/overlay-controller';
 import {Config} from '../../config/config';
 import {Animation} from '../../animations/animation';
 import {NavParams} from '../nav/nav-controller';
@@ -69,28 +69,30 @@ import {extend} from '../../util/util';
 @Injectable()
 export class Popup {
 
-  constructor(ctrl: OverlayController, config: Config) {
-    this.ctrl = ctrl;
-    this.config = config;
+  constructor(_mngr: OverlayManager, _config: Config) {
+    this._mngr = _mngr;
+    this._config = _config;
+  }
+
+  create() {
+
   }
 
   /**
    * @private
-   * @param {TODO} opts  TODO
-   * @returns {object} A promise
    */
-  open(opts) {
+  _open(opts) {
     return new Promise((resolve, reject)=> {
       opts.promiseResolve = resolve;
       opts.promiseReject = reject;
 
       opts = extend({
         pageType: OVERLAY_TYPE,
-        enterAnimation: this.config.get('popupEnter'),
-        leaveAnimation: this.config.get('popupLeave')
+        enterAnimation: this._config.get('popupEnter'),
+        leaveAnimation: this._config.get('popupLeave')
       }, opts);
 
-      return this.ctrl.open(PopupCmp, opts, opts);
+      return this._mngr.open(PopupCmp, opts, opts);
     });
   }
 
@@ -128,7 +130,7 @@ export class Popup {
         button
       ]
     }, opts);
-    return this.open(opts);
+    return this._open(opts);
   }
 
   /**
@@ -174,7 +176,7 @@ export class Popup {
         cancelButton, okButton
       ]
     }, opts);
-    return this.open(opts);
+    return this._open(opts);
   }
 
   /**
@@ -225,7 +227,7 @@ export class Popup {
         cancelButton, okButton
       ]
     }, opts);
-    return this.open(opts);
+    return this._open(opts);
   }
 
   /**
@@ -235,9 +237,9 @@ export class Popup {
    */
   get(handle) {
     if (handle) {
-      return this.ctrl.getByHandle(handle);
+      return this._mngr.getByHandle(handle);
     }
-    return this.ctrl.getByType(OVERLAY_TYPE);
+    return this._mngr.getByType(OVERLAY_TYPE);
   }
 
 }
