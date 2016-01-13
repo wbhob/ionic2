@@ -17,9 +17,6 @@ export * from './util/keyboard'
 
 export * from './animations/animation'
 
-export * from './translation/translate'
-export * from './translation/translate_pipe'
-
 // these modules don't export anything
 import './config/modes'
 import './platform/registry'

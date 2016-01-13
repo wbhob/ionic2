@@ -10,7 +10,6 @@ import {Keyboard} from '../util/keyboard';
 import {ScrollTo} from '../animations/scroll-to';
 import {Events} from '../util/events';
 import {NavRegistry} from '../components/nav/nav-registry';
-import {Translate} from '../translation/translate';
 import {ClickBlock} from '../util/click-block';
 import {FeatureDetect} from '../util/feature-detect';
 import {TapClick} from '../components/tap-click/tap-click';
@@ -57,7 +56,6 @@ export function ionicProviders(args: any={}) {
     TapClick,
     Form,
     Keyboard,
-    Translate,
     ROUTER_PROVIDERS,
     provide(LocationStrategy, {useClass: HashLocationStrategy}),
     HTTP_PROVIDERS,
