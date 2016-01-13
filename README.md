@@ -8,7 +8,7 @@ Moving forward we'll have all issues created through our [Ionitron Issues Form](
 
 ### Ionic Version Roadmap
 
-- Ionic v1 will stay the master branch
+- Ionic v1 will stay the `master` branch
 - Ionic v2 will be developed within the `2.0` branch
 - Post Ionic v2 beta, v1 will move to the `1.x` branch
-- Ionic v2 will become the v1 branch
+- Ionic v2 will become the `master` branch
