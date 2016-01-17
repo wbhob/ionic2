@@ -2,7 +2,11 @@
 
 You can now find Ionic2's development in the `2.0` branch, within the `ionic` repo: https://github.com/driftyco/ionic/tree/2.0
 
+
+## Issues
 We're currently in the process of moving our issues over to the `ionic` repo.
+
+If you need to open an issue, please open an issue through our [Ionitron Issues Form](http://ionicframework.com/submit-issue/)
 
 Moving forward we'll have all issues created through our [Ionitron Issues Form](http://ionicframework.com/submit-issue/), and properly label v1 and v2 issues.
 
