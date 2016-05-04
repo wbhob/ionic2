@@ -5,5 +5,4 @@ test:
 
 deployment:
   staging:
-    commands:
-      - echo $TEST_VAR
+    - echo $TEST_VAR
