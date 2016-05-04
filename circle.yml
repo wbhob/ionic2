@@ -7,4 +7,4 @@ deployment:
   staging:
     branch: master
     commands:
-      - ./test.sh
+      - echo $CI_PULL_REQUEST
