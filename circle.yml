@@ -1,7 +1,6 @@
 test:
   override:
-    - echo $TEST_VAR
-    - echo 'PR test ran'
+    - echo $CI_PULL_REQUEST
 
 
 deployment:
