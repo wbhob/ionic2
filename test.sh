@@ -18,7 +18,7 @@ else
   git pull origin master
 fi
 
-echo "Test 1" > test.txt
+echo "Test 2" > test.txt
 
 
 git add -A
