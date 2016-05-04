@@ -1,6 +1,7 @@
 test:
   override:
     - echo $TEST_VAR
+    - echo 'PR test ran'
 
 
 deployment:
@@ -8,3 +9,4 @@ deployment:
     branch: master
     commands:
       - echo $TEST_VAR
+      - echo 'PR deployment ran'
