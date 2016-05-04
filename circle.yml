@@ -7,5 +7,4 @@ deployment:
   staging:
     branch: master
     commands:
-      - echo $TEST_VAR
-      - echo 'PR deployment ran'
+      - echo $CI_PULL_REQUEST
