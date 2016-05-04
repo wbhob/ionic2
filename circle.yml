@@ -1,0 +1,9 @@
+test:
+  override:
+    - echo $TEST_VAR
+
+
+deployment:
+  staging:
+    commands:
+      - echo $TEST_VAR
