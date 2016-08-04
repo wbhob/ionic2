@@ -1,6 +1,6 @@
 # Ionic 2 Has Moved!
 
-You can now find Ionic2's development in the `2.0` branch, within the `ionic` repo: https://github.com/driftyco/ionic/
+You can now find Ionic 2's development in the `master` branch, within the `ionic` repo: https://github.com/driftyco/ionic/
 
 
 ## Issues
@@ -12,7 +12,5 @@ Moving forward we'll have all issues created through our [Ionitron Issues Form](
 
 ### Ionic Version Roadmap
 
-- Ionic v1 will stay the `master` branch
-- Ionic v2 will be developed within the `2.0` branch
-- Post Ionic v2 beta, v1 will move to the `1.x` branch
-- Ionic v2 will become the `master` branch
+- Ionic v2 is the `master` branch
+- Ionic v1 is available in the `1.x` branch
